@@ -1,5 +1,6 @@
 package de.thomaskoscheck.wgverwaltung;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
     EditText product;
     EditText price;
+    Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         product = findViewById(R.id.product);
         price = findViewById(R.id.price);
+        settings = SettingsStore.load(this);
     }
 
     @Override
@@ -38,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

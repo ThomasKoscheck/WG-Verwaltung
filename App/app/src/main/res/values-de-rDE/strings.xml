@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WGVerwaltung</string>
+    <string name="send">Absenden</string>
+    <string name="save">Speichern</string>
+    <string name="requester">Dein Name hier</string>
+    <string name="price">Preis</string>
+    <string name="password">Du musst Thoma snach dem Passwort fragen</string>
+    <string name="expenseDescription">Beschreibung der Ausgabe</string>
+    <string name="clear">Form Leeren</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="title_activity_settings_activty">Einstellungen</string>
+</resources>

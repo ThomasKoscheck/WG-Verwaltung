@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 public class SettingsStore {
 
     private static SharedPreferences getSharedPreferences(Context context){
-        return context.getSharedPreferences(context.getString(R.string.settings), Context.MODE_PRIVATE);
+        return context.getSharedPreferences(context.getString(R.string.settingsKey), Context.MODE_PRIVATE);
     }
 
     public static void addValue(String key, String value, Context context){

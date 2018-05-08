@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">WGVerwaltung</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_settings_activty">Settings</string>
+    <string name="settingsKey" translatable="false">settingsKey</string>
+    <string name="passwordKey" translatable="false">passwordKey</string>
+    <string name="requesterKey" translatable="false">requesterKey</string>
+    <string name="password">Ask Thomas for the password</string>
+    <string name="requester">Your name here</string>
+    <string name="save">Save</string>
+    <string name="expenseDescription">Description of the expense</string>
+    <string name="price">Price</string>
+    <string name="clear">Clear form</string>
+    <string name="send">Send</string>
+    <string name="title" translatable="false">WG - Management</string>
 </resources>
