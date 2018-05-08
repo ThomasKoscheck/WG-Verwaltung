@@ -17,7 +17,7 @@ $requester = $_GET['requester'];
 $price = $_GET['price'];
 
 //Einzelne Abfragen
-$sql_getCredit = "SELECT credit FROM '$dbtable' ORDER BY id DESC LIMIT 1";
+$sql_getCredit = "SELECT credit FROM $dbtable ORDER BY id DESC LIMIT 1";
 
 //Vorbereitung zu Abfrage
 $retval = $conn->prepare($sql_getCredit);
@@ -34,7 +34,7 @@ while($row = $result->fetch_assoc())
 $credit = $lastCredit-$price;
 
 //INSERT INTO DATABASE
-$sql_setNew = "INSERT INTO '$dbtable' (credit, product, requester, price)
+$sql_setNew = "INSERT INTO $dbtable (credit, product, requester, price)
                 VALUES ('$credit', '$product', '$requester', '$price')";
 
 
