@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -25,11 +26,10 @@ public class SendRequestDetails extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String data = params[1];
-        InputStream stream = null;
-        String result = null;
+        InputStream stream;
+        String result="";
         try {
-            URL url = new URL("https://thomaskoscheck.de/projekte/wg-verwaltung/index.php" + data);
+            URL url = new URL("https://thomaskoscheck.de/projekte/wg-verwaltung/index.php" + params[0]);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
@@ -51,6 +51,7 @@ public class SendRequestDetails extends AsyncTask<String, Void, String> {
         Log.e("TK", result);
         return result;
     }
+
 
     /**
      * Converts the contents of an InputStream to a String.

@@ -64,34 +64,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void send(View view) {
-        String product = this.product.getText().toString();
+        String productString = product.getText().toString();
         String priceString = price.getText().toString();
-        if (priceString.equals("")&&product.equals("")) {
+        if (priceString.equals("") && productString.equals("")) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceAndProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
-        }
-        else if(priceString.equals("")){
+        } else if (priceString.equals("")) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
-        }
-        else if(product.equals("")){
+        } else if (productString.equals("")) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
+        } else {
+            double price = Double.parseDouble(priceString);
+            sendRequest(productString, price);
         }
-
-        double price = Double.parseDouble(priceString);
-        sendRequest(product, price);
     }
 
     private void sendRequest(String description, double price) {
-
-        String postData = "?";
-        postData += "product=" + description + "&";
-        postData += "price=" + price + "&";
-        postData += "requester=" + settings.getRequester() + "&";
-        postData += "password=" + settings.getPassword();
-
+        RequestDetails requestDetails = new RequestDetails(description, price);
         SendRequestDetails sendRequestDetails = new SendRequestDetails(leftCredit);
-        sendRequestDetails.execute("", postData);
+        sendRequestDetails.execute(getGETString(requestDetails));
+    }
+
+
+    private String getGETString(RequestDetails requestDetails) {
+        Settings settings = SettingsStore.load(this);
+        String GETData = "?";
+        GETData += "product=" + requestDetails.getProduct() + "&";
+        GETData += "price=" + requestDetails.getPrice() + "&";
+        GETData += "requester=" + settings.getRequester() + "&";
+        GETData += "password=" + settings.getPassword();
+        return GETData;
     }
 }
