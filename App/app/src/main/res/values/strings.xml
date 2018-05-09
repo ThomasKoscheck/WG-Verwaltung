@@ -13,4 +13,7 @@
     <string name="clear">Clear form</string>
     <string name="send">Send</string>
     <string name="title" translatable="false">WG - Management</string>
+    <string name="errorNoPriceSet">Please set the price</string>
+    <string name="errorNoPriceAndProductSet">Please set price and product</string>
+    <string name="errorNoProductSet">Please set the product</string>
 </resources>

@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText product;
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         settings = SettingsStore.load(this);
         leftCredit = findViewById(R.id.leftCredit);
-        sendRequest("",0);
+        sendRequest("", 0);
     }
 
     @Override
@@ -64,9 +66,21 @@ public class MainActivity extends AppCompatActivity {
     public void send(View view) {
         String product = this.product.getText().toString();
         String priceString = price.getText().toString();
+        if (priceString.equals("")&&product.equals("")) {
+            Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceAndProductSet, Toast.LENGTH_LONG);
+            errorNoPrice.show();
+        }
+        else if(priceString.equals("")){
+            Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceSet, Toast.LENGTH_LONG);
+            errorNoPrice.show();
+        }
+        else if(product.equals("")){
+            Toast errorNoPrice = Toast.makeText(this, R.string.errorNoProductSet, Toast.LENGTH_LONG);
+            errorNoPrice.show();
+        }
+
         double price = Double.parseDouble(priceString);
         sendRequest(product, price);
-
     }
 
     private void sendRequest(String description, double price) {
