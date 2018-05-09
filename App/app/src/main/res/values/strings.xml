@@ -16,4 +16,6 @@
     <string name="errorNoPriceSet">Please set the price</string>
     <string name="errorNoPriceAndProductSet">Please set price and product</string>
     <string name="errorNoProductSet">Please set the product</string>
+    <string name="SendConfirmationText">Do you really want to send?</string>
+    <string name="SendConfirmation">Send?</string>
 </resources>
