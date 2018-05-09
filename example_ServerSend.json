@@ -1,0 +1,9 @@
+{
+    "credit":"50.0",
+    "newAppVersion":"0.4",
+    "employees":[
+        { "requester":"John", "price":"5.0", "done":true },
+        { "requester":"John", "price":"5.0", "done":true },
+        { "requester":"John", "price":"5.0", "done":true }
+    ]
+}
