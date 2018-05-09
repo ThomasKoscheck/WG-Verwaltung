@@ -1,7 +1,12 @@
 package de.thomaskoscheck.wgverwaltung;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.widget.TextView;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,7 +16,12 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class SendDeviceDetails extends AsyncTask<String, Void, String> {
+public class SendRequestDetails extends AsyncTask<String, Void, String> {
+    private TextView leftCredit;
+
+    public SendRequestDetails(TextView textView) {
+        this.leftCredit = textView;
+    }
 
     @Override
     protected String doInBackground(String... params) {
@@ -19,12 +29,9 @@ public class SendDeviceDetails extends AsyncTask<String, Void, String> {
         InputStream stream = null;
         String result = null;
         try {
-
-
             URL url = new URL("https://thomaskoscheck.de/projekte/wg-verwaltung/index.php" + data);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-
             connection.connect();
 
             int responseCode = connection.getResponseCode();
@@ -49,8 +56,8 @@ public class SendDeviceDetails extends AsyncTask<String, Void, String> {
      * Converts the contents of an InputStream to a String.
      */
     public String readStream(InputStream stream, int maxReadSize)
-            throws IOException, UnsupportedEncodingException {
-        Reader reader = null;
+            throws IOException {
+        Reader reader;
         reader = new InputStreamReader(stream, "UTF-8");
         char[] rawBuffer = new char[maxReadSize];
         int readSize;
@@ -69,5 +76,6 @@ public class SendDeviceDetails extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
+        leftCredit.setText(result);
     }
 }

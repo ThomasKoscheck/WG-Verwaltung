@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     EditText product;
     EditText price;
     Settings settings;
+    TextView leftCredit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         product = findViewById(R.id.product);
         price = findViewById(R.id.price);
         settings = SettingsStore.load(this);
+        leftCredit = findViewById(R.id.leftCredit);
     }
 
     @Override
@@ -49,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clear(View view) {
+        clearInput();
+    }
+
+    private void clearInput(){
         product.setText("");
         price.setText("");
     }
@@ -59,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
         double price = Double.parseDouble(priceString);
 
         String postData = "?";
-        postData += "product=" + product+"&";
-        postData += "price=" + price+"&";
-        postData += "requester=" + "Dummy";
+        postData += "product=" + product + "&";
+        postData += "price=" + price + "&";
+        postData += "requester=" + settings.getRequester() + "&";
+        postData += "password=" + settings.getPassword();
 
-        SendDeviceDetails sendDeviceDetails = new SendDeviceDetails();
-        sendDeviceDetails.execute("http://84.200.50.33:8000", postData);
+        SendRequestDetails sendRequestDetails = new SendRequestDetails(leftCredit);
+        sendRequestDetails.execute("", postData);
     }
 }
