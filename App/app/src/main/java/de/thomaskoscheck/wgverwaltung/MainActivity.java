@@ -1,10 +1,14 @@
 package de.thomaskoscheck.wgverwaltung;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         settings = SettingsStore.load(this);
         leftCredit = findViewById(R.id.leftCredit);
-        sendRequest("", 0);
+        sendRequest("", 0.0);
     }
 
     @Override
@@ -64,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void send(View view) {
-        String productString = product.getText().toString();
-        String priceString = price.getText().toString();
+        final String productString = product.getText().toString();
+        final String priceString = price.getText().toString();
         if (priceString.equals("") && productString.equals("")) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceAndProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
@@ -76,9 +80,27 @@ public class MainActivity extends AppCompatActivity {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
         } else {
-            double price = Double.parseDouble(priceString);
-            sendRequest(productString, price);
+            buildAlertDialog(priceString, productString);
         }
+    }
+
+    private void buildAlertDialog(final String priceString, final String productString){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        builder.setTitle(R.string.SendConfirmation)
+                .setMessage(R.string.SendConfirmationText)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        double price = Double.parseDouble(priceString);
+                        sendRequest(productString, price);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_input_add)
+                .show();
     }
 
     private void sendRequest(String description, double price) {
@@ -95,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         GETData += "price=" + requestDetails.getPrice() + "&";
         GETData += "requester=" + settings.getRequester() + "&";
         GETData += "password=" + settings.getPassword();
+        Log.d("TK", GETData);
         return GETData;
     }
 }
