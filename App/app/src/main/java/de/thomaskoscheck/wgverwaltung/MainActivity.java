@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         product = findViewById(R.id.product);
         price = findViewById(R.id.price);
@@ -86,21 +86,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildAlertDialog(final String priceString, final String productString){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        builder.setTitle(R.string.SendConfirmation)
-                .setMessage(R.string.SendConfirmationText)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        double price = Double.parseDouble(priceString);
-                        sendRequest(productString, price);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_input_add)
-                .show();
+        builder.setTitle(R.string.SendConfirmation);
+        builder.setMessage(R.string.SendConfirmationText);
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                double price = Double.parseDouble(priceString);
+                sendRequest(productString, price);
+            }
+        });
+
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setIcon(android.R.drawable.ic_input_add);
+        builder.show();
     }
 
     private void sendRequest(String description, double price) {
