@@ -1,11 +1,12 @@
 <?php
-function sqlAction() {
     //getting the values from app
     $product = $_GET['product'];
     $requester = $_GET['requester'];
     $price = $_GET['price'];
     $password = $_GET['password'];
-     
+
+    function sqlAction($product, $requester, $price, $password)
+    {
     //get login credentials from outside of webroot
     $constants = parse_ini_file("path-to-ini-file-outside-of-webroot");
     $dbpass = $constants['database-user-password'];
@@ -46,9 +47,9 @@ function sqlAction() {
         $sql_setNew = "INSERT INTO $dbtable (credit, product, requester, price)
             VALUES ('$credit', '$product', '$requester', '$price')";
      
-        /*if ($conn->query($sql_setNew) === false) {
+        if ($conn->query($sql_setNew) === false) {
             echo "Error: " . $sql_setNew . "<br>" . $conn->error;
-        }*/
+        }
      
         $conn->close();
      
@@ -58,9 +59,7 @@ function sqlAction() {
         
 }
     
-function sqlFakeAction() {
-    $password = $_GET['password'];
-    
+function sqlFakeAction($password) {  
     //get login credentials from outside of webroot
     $constants = parse_ini_file("path-to-ini-file-outside-of-webroot");
     $dbpass = $constants['database-user-password'];
@@ -104,16 +103,17 @@ function sqlFakeAction() {
        
 }
     
+
 //all values are given
-if (!empty($_POST['product']) || !empty($_POST['requester']) || !empty($_POST['price'])) {
-    sqlAction(); 
-} 
-  
-//only password given, just echo current credit
-elseif(!empty($_POST['password'])) {
-    sqlFakeAction();
+if (!empty($product) && !empty($price) && !empty($requester)) {
+    sqlAction($product, $requester, $price, $password);
 }
-   
+
+//only password given, just echo current credit
+elseif ($product === "" && $price == 0.0 && !empty($requester)) {
+    sqlFakeAction($password);
+}
+
 //some values seem to be blank
-else { echo "Some important values seem to be blank"; }
+else {echo "Some important values seem to be blank";}
     
