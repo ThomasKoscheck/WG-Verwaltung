@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         settings = SettingsStore.load(this);
         leftCredit = findViewById(R.id.leftCredit);
+        sendRequest("",0);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         clearInput();
     }
 
-    private void clearInput(){
+    private void clearInput() {
         product.setText("");
         price.setText("");
     }
@@ -64,9 +65,14 @@ public class MainActivity extends AppCompatActivity {
         String product = this.product.getText().toString();
         String priceString = price.getText().toString();
         double price = Double.parseDouble(priceString);
+        sendRequest(product, price);
+
+    }
+
+    private void sendRequest(String description, double price) {
 
         String postData = "?";
-        postData += "product=" + product + "&";
+        postData += "product=" + description + "&";
         postData += "price=" + price + "&";
         postData += "requester=" + settings.getRequester() + "&";
         postData += "password=" + settings.getPassword();
