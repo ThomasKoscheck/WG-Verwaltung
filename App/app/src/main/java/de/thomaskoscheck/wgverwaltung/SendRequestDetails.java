@@ -1,33 +1,28 @@
 package de.thomaskoscheck.wgverwaltung;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.TextView;
-
+import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class SendRequestDetails extends AsyncTask<String, Void, String> {
+public class SendRequestDetails extends AsyncTask<String, Void, ServerResponse> {
     private TextView leftCredit;
 
-    public SendRequestDetails(TextView textView) {
+    SendRequestDetails(TextView textView) {
         this.leftCredit = textView;
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected ServerResponse doInBackground(String... params) {
         InputStream stream;
-        String result="";
+        String result = "";
         try {
             URL url = new URL("https://thomaskoscheck.de/projekte/wg-verwaltung/index.php" + params[0]);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -44,14 +39,18 @@ public class SendRequestDetails extends AsyncTask<String, Void, String> {
                 // Converts Stream to String with max length of 500.
                 result = readStream(stream, 500);
             }
-
         } catch (Exception e) {
-            Log.d("TK", e.getStackTrace().toString());
+            e.printStackTrace();
         }
         Log.e("TK", result);
-        return result;
+        ServerResponse serverResponse = null;
+        try {
+            serverResponse = JsonParser.parseJson(result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return serverResponse;
     }
-
 
     /**
      * Converts the contents of an InputStream to a String.
@@ -74,9 +73,8 @@ public class SendRequestDetails extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(ServerResponse result) {
         super.onPostExecute(result);
-        Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
-        leftCredit.setText(result);
+        leftCredit.setText(result.getCredit());
     }
 }

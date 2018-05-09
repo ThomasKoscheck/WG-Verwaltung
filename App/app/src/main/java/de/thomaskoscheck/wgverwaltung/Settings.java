@@ -4,7 +4,7 @@ class Settings {
     private String password;
     private String requester;
 
-    public Settings(String requester, String password) {
+    Settings(String requester, String password) {
         this.password = password;
         this.requester = requester;
     }
