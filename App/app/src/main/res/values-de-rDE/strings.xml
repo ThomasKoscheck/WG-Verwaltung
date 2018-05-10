@@ -13,6 +13,9 @@
     <string name="errorNoPriceSet">Bitte gib den Preis ein</string>
     <string name="errorNoPriceAndProductSet">Bitte gib den Preis und das Produkt ein</string>
     <string name="errorNoProductSet">Bitte gib das Produkt ein</string>
-    <string name="SendConfirmation">Senden?</string>
     <string name="SendConfirmationText">Willst du wirklich senden?</string>
+    <string name="errorParsingTheJson">Ein Fehler ist aufgetreten, bitte überprüfe deine Netzwerkverbindung</string>
+    <string name="SendConfirmationText">Wirklich senden?</string>
+    <string name="SendConfirmation">Senden?</string>
+    <string name="SendConfirmation">Senden</string>
 </resources>

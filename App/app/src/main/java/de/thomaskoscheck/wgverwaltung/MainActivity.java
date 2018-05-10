@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         settings = SettingsStore.load(this);
         leftCredit = findViewById(R.id.leftCredit);
-        sendRequest("", 0.0);
+        sendRequest("yoyo", 1);
     }
 
     @Override

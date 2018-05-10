@@ -37,7 +37,7 @@ public class SendRequestDetails extends AsyncTask<String, Void, ServerResponse> 
             stream = connection.getInputStream();
             if (stream != null) {
                 // Converts Stream to String with max length of 500.
-                result = readStream(stream, 500);
+                result = readStream(stream, 1000000);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,6 +75,11 @@ public class SendRequestDetails extends AsyncTask<String, Void, ServerResponse> 
     @Override
     protected void onPostExecute(ServerResponse result) {
         super.onPostExecute(result);
-        leftCredit.setText(result.getCredit());
+        if(result!=null) {
+            leftCredit.setText(result.getCredit());
+        }
+        else{
+            leftCredit.setText(leftCredit.getContext().getText(R.string.errorParsingTheJson));
+        }
     }
 }
