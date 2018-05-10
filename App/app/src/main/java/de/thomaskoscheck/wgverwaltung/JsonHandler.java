@@ -13,12 +13,10 @@ public class JsonHandler {
 
         for (int i = 0; i < expensesJson.length(); i++) {
             String requester = expensesJson.getJSONObject(i).getString("requester");
-            String product = expensesJson.getJSONObject(i).getString("requester");
-            String priceString = expensesJson.getJSONObject(i).getString("requester");
-            String doneString = expensesJson.getJSONObject(i).getString("requester");
+            String product = expensesJson.getJSONObject(i).getString("product");
+            String priceString = expensesJson.getJSONObject(i).getString("price");
             double price = Double.parseDouble(priceString);
-            boolean done = Boolean.parseBoolean(doneString);
-            expenses[i] = new Expense(requester, product, price, done);
+            expenses[i] = new Expense(requester, product, price);
         }
         return new ServerResponse(credit, newestAppVersion, expenses);
     }

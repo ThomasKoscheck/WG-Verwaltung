@@ -24,10 +24,13 @@ public class SettingsActivity extends AppCompatActivity {
         requesterField = findViewById(R.id.requester);
         serverField = findViewById(R.id.server);
         portField = findViewById(R.id.port);
+
         settings = SettingsStore.load(this);
         Log.d("TK", "password: " + settings.getPassword() + " requester: " + settings.getRequester());
         passwordField.setText(settings.getPassword());
         requesterField.setText(settings.getRequester());
+        serverField.setText(settings.getServer());
+        portField.setText(String.valueOf(settings.getPort()));
     }
 
     public void save(View view) {

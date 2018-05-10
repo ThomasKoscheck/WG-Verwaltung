@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         product = findViewById(R.id.product);
         price = findViewById(R.id.price);
+        leftCredit = findViewById(R.id.leftCredit);
         settings = SettingsStore.load(this);
+        fetchDataFromServer();
     }
 
     @Override
@@ -109,5 +111,14 @@ public class MainActivity extends AppCompatActivity {
     }
     private void fetchDataFromServer(){
         GetServerData getServerData = new GetServerData();
+        getServerData.setDataProcessedListener(new DataProcessedListener() {
+            @Override
+            public void onDataLoaded(ServerResponse serverResponse) {
+                //TODO: Update UI
+                leftCredit.setText(serverResponse.getCredit());
+                Log.d("TK", "Callback received");
+            }
+        });
+        getServerData.execute(new GetDetails(settings));
     }
 }

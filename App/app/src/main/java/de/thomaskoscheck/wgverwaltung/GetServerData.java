@@ -1,6 +1,10 @@
 package de.thomaskoscheck.wgverwaltung;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,25 +13,39 @@ import java.io.Reader;
 import java.net.Socket;
 
 //TODO: Update UI
-class GetServerData extends AsyncTask<GetDetails, Void, Boolean> {
+class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
+    private DataProcessedListener dataProcessedListener;
 
     @Override
-    protected Boolean doInBackground(GetDetails... params) {
+    protected ServerResponse doInBackground(GetDetails... params) {
         try {
-            Socket socket = new Socket(params[0].getSettings().getServer(), params[0].getSettings().getPort());
+            Settings settings=params[0].getSettings();
+            Socket socket = new Socket(settings.getServer(), settings.getPort());
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
-            outputStreamWriter.write("getServerData");
+            String toWrite = "getServerData";
+            outputStreamWriter.write(StringHelper.getStringWithZeros(toWrite.length(), settings.getAMOUNTOFCHARACTERS()));
+            outputStreamWriter.write(toWrite);
+            outputStreamWriter.flush();
 
             InputStream inputStream = socket.getInputStream();
             String serverResponseEncrypted = readStream(inputStream, 100000);
-            String serverResponseDecrypted = Cryptographics.decryptString(serverResponseEncrypted);
 
             outputStreamWriter.close();
+            //inputStream.close();
+            //outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
+            //outputStreamWriter.write("quit");
             socket.close();
-            return true;
+            String serverResponseDecrypted = Cryptographics.decryptString(serverResponseEncrypted);
+            ServerResponse serverResponse = null;
+            try {
+                serverResponse = JsonHandler.parseJson(serverResponseDecrypted);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return serverResponse;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -45,5 +63,15 @@ class GetServerData extends AsyncTask<GetDetails, Void, Boolean> {
             maxReadSize -= readSize;
         }
         return buffer.toString();
+    }
+
+    public void setDataProcessedListener(DataProcessedListener dataProcessedListener) {
+        this.dataProcessedListener = dataProcessedListener;
+    }
+
+    @Override
+    protected void onPostExecute(ServerResponse serverResponse) {
+        super.onPostExecute(serverResponse);
+        dataProcessedListener.onDataLoaded(serverResponse);
     }
 }

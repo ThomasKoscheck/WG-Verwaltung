@@ -4,13 +4,11 @@ class Expense {
     private String requester;
     private String product;
     private double price;
-    private boolean done;
 
-    Expense(String requester, String product, double price, boolean done) {
+    Expense(String requester, String product, double price) {
         this.requester = requester;
         this.product = product;
         this.price = price;
-        this.done = done;
     }
 
     public String getRequester() {
@@ -25,7 +23,4 @@ class Expense {
         return price;
     }
 
-    public boolean isDone() {
-        return done;
-    }
 }

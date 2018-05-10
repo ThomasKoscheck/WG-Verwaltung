@@ -9,10 +9,12 @@ public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
     @Override
     protected Boolean doInBackground(SendDetails... params) {
         try {
-            Socket socket = new Socket("thomaskoscheck.de", 9999);
+            Settings settings= params[0].getSettings();
+            Socket socket = new Socket(settings.getServer(), settings.getPort());
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
             String rawJsonString = JsonHandler.generateJsonString(params[0]);
             String encryptedJsonString = Cryptographics.encryptString(rawJsonString);
+            outputStreamWriter.write(StringHelper.getStringWithZeros(encryptedJsonString.length(), settings.getAMOUNTOFCHARACTERS()));
             outputStreamWriter.write(encryptedJsonString);
             outputStreamWriter.close();
             socket.close();

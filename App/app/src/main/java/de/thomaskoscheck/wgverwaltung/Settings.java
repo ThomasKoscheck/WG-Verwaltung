@@ -5,6 +5,7 @@ class Settings {
     private String requester;
     private String server;
     private int port;
+    private int AMOUNTOFCHARACTERS=6;
 
     Settings(String requester, String password, String server, int port) {
         this.password = password;
@@ -43,5 +44,9 @@ class Settings {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public int getAMOUNTOFCHARACTERS() {
+        return AMOUNTOFCHARACTERS;
     }
 }
