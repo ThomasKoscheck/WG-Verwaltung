@@ -31,7 +31,7 @@ def listen():
                 # getting value of the stream that will be send from client           
                 data = current_connection.recv(int(datalength))
 
-                print(bcolors.OKBLUE + "--- Got this data ---\n>>> "+ bcolors.ENDC  + data)
+                print(bcolors.OKBLUE + "--- Got this data ---\n" + bcolors.ENDC  + data + "\n")
 
                 if data.endswith("getServerData"):
                     
@@ -41,7 +41,7 @@ def listen():
 
                     current_connection.shutdown(1)
                     current_connection.close() 
-                    print(bcolors.OKGREEN + "--- Closed connection ---" + bcolors.ENDC)
+                    print(bcolors.WARNING + "--- Closed connection ---" + bcolors.ENDC)
                     break 
 
 
@@ -55,7 +55,7 @@ def listen():
 
                     current_connection.shutdown(1)
                     current_connection.close()
-                    print("--- Inserted new data in database, now closing connection---")
+                    print(bcolors.WARNING + "--- Closed connection ---" + bcolors.ENDC)
                     break
 
             except Exception as e:    
@@ -95,7 +95,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
 
     # Prepare SQL query to INSERT a record into the database.
     sql = "INSERT INTO %s (credit, product, requester, price, date, done) \
-       VALUES ('%d', '%s', '%s', '%d', '%s', '%i' )" % \
+       VALUES ('%f', '%s', '%s', '%f', '%s', '%i' )" % \
        (dbtable, credit, product, requester, price, dates, done)
 
     try:
@@ -103,6 +103,8 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
         cursor.execute(sql)
         # Commit your changes in the database
         db.commit()
+
+        print(bcolors.OKGREEN + "--- Inserted new entry in database ---" + bcolors.ENDC)
 
     except Exception as e:
         print(bcolors.FAIL + e + bcolors.ENDC)
@@ -177,7 +179,7 @@ def buildJSON():
         jsonstring = jsonstring[:-1]
 
         # Now print fetched result
-        print(bcolors.OKBLUE + "--- Builded this json --- \n " + bcolors.ENDC + jsonstring)
+        print(bcolors.OKBLUE + "--- Builded this json --- \n" + bcolors.ENDC + jsonstring + "\n")
 
         json = "{" + \
             '"credit":"' + str(getCreditSQL()) + '",'  + \
@@ -201,7 +203,7 @@ def getLoginCredentials():
     try:
         # get login credentials from outside of webroot
         config = configparser.ConfigParser()
-        config.read('/path-to-config.ini')
+        config.read('/path/to/ini/file')
         dbpass = config.get('project-wg-verwaltung','wg_pw')
         dbuser = config.get('project-wg-verwaltung','wg_user')
         dbname = config.get('project-wg-verwaltung','wg_dbname')
