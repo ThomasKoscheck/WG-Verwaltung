@@ -7,6 +7,12 @@ from datetime import date
 from time import sleep
 import MySQLdb
 from six.moves import configparser
+from Crypto import Random
+from Crypto.Cipher import AES
+from base64 import b64encode, b64decode
+from os import urandom
+
+BLOCK_SIZE=16
 
 class bcolors:
     HEADER = '\033[95m'
@@ -27,26 +33,44 @@ def listen():
         current_connection, address = connection.accept()
         while True:
             datalength = current_connection.recv(6)
+            print("recieving: " + datalength)
+            
+            # generate IV for AES encryption
+            random_bytes = urandom(16)
+            IV = b64encode(random_bytes).decode('utf-8')[:17] # because of some strange things it only things
+            current_connection.send(IV)
+
+            IV = IV[:16]
+                     
+            print(bcolors.HEADER + "--- Generated IV for AES ---\n" + bcolors.ENDC + IV) 
+
+
             try:   
                 # getting value of the stream that will be send from client           
                 data = current_connection.recv(int(datalength))
+                print(data)
 
-                print(bcolors.OKBLUE + "--- Got this data ---\n>>> "+ bcolors.ENDC  + data)
+                # decrypting the data
+                dbhost, dbuser, dbpass, dbname, dbtable, appVersion, auth = getLoginCredentials()
+                print(data + "\n")
+                data = decrypt(data, auth, IV)
+
+                print(bcolors.OKBLUE + "--- Got this data ---\n" + bcolors.ENDC  + data + "\n")
 
                 if data.endswith("getServerData"):
                     
                     json = buildJSON()
                     current_connection.send(json)
-                    print(bcolors.OKGREEN + "--- Sent data to server ---" + bcolors.ENDC)
+                    print(bcolors.OKGREEN + "--- Sent data to server ---\n" + bcolors.ENDC)
 
                     current_connection.shutdown(1)
                     current_connection.close() 
-                    print(bcolors.OKGREEN + "--- Closed connection ---" + bcolors.ENDC)
+                    print(bcolors.WARNING + "--- Closed connection ---\n" + bcolors.ENDC)
                     break 
 
 
                 else:
-                    print(bcolors.OKBLUE + "Client sent: " + bcolors.ENDC + data)
+                    print(bcolors.OKBLUE + "--- Client sent this data ---\n" + bcolors.ENDC + data + "\n")
 
                     product, requester, price, dates, done = parseJSON(data) # getting parsed data from json send from app
                     credit = getCreditSQL() # get the actual credit
@@ -55,11 +79,11 @@ def listen():
 
                     current_connection.shutdown(1)
                     current_connection.close()
-                    print("--- Inserted new data in database, now closing connection---")
+                    print(bcolors.WARNING + "--- Closed connection ---\n" + bcolors.ENDC)
                     break
 
             except Exception as e:    
-                print(bcolors.FAIL + e  + bcolors.ENDC)
+                print(bcolors.FAIL + str(e) + bcolors.ENDC)
                 print(bcolors.FAIL + "Either the data is empty or an other error occured getting data" + bcolors.ENDC)
                 current_connection.shutdown(1)
                 current_connection.close()
@@ -79,12 +103,12 @@ def parseJSON(data):
         return product, requester, price, dates, done
          
     except Exception as e:
-        print(bcolors.FAIL + e  + bcolors.ENDC)
+        print(bcolors.FAIL + str(e) + bcolors.ENDC)
         print(bcolors.FAIL + "Error parsing json" + bcolors.ENDC)
     
 def insertIntoSQL(credit, product, requester, price, dates, done):  
     # get login credentials from outside of webroot
-    dbhost, dbuser, dbpass, dbname, dbtable, appVersion = getLoginCredentials()
+    dbhost, dbuser, dbpass, dbname, dbtable, appVersion, auth = getLoginCredentials()
 
     # Connect to MariaDB  
     # Open database connection
@@ -95,7 +119,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
 
     # Prepare SQL query to INSERT a record into the database.
     sql = "INSERT INTO %s (credit, product, requester, price, date, done) \
-       VALUES ('%d', '%s', '%s', '%d', '%s', '%i' )" % \
+       VALUES ('%f', '%s', '%s', '%f', '%s', '%i' )" % \
        (dbtable, credit, product, requester, price, dates, done)
 
     try:
@@ -104,8 +128,10 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
         # Commit your changes in the database
         db.commit()
 
+        print(bcolors.OKGREEN + "--- Inserted new entry in database ---\n" + bcolors.ENDC)
+
     except Exception as e:
-        print(bcolors.FAIL + e + bcolors.ENDC)
+        print(bcolors.FAIL+ str(e) +bcolors.ENDC)
         # Rollback in case there is any error
         db.rollback()
 
@@ -114,7 +140,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
 
 def getCreditSQL():
     # get login credentials from outside of webroot
-    dbhost, dbuser, dbpass, dbname, dbtable, appVersion = getLoginCredentials()
+    dbhost, dbuser, dbpass, dbname, dbtable, appVersion, auth= getLoginCredentials()
     credit = -9999
 
     # Connect to MariaDB  
@@ -137,7 +163,7 @@ def getCreditSQL():
 
 
     except Exception as e:
-        print(bcolors.FAIL + e  + bcolors.ENDC)
+        print(bcolors.FAIL + str(e)  + bcolors.ENDC)
         print("bcolors.FAIL + Error: unable to fetch current credit "+ bcolors.ENDC)
 
     # disconnect from server
@@ -147,7 +173,7 @@ def getCreditSQL():
 
 def buildJSON():
      # get login credentials from outside of webroot
-    dbhost, dbuser, dbpass, dbname, dbtable, appVersion = getLoginCredentials()
+    dbhost, dbuser, dbpass, dbname, dbtable, appVersion, auth = getLoginCredentials()
 
     # Open database connection
     db = MySQLdb.connect(dbhost, dbuser, dbpass, dbname)
@@ -177,7 +203,7 @@ def buildJSON():
         jsonstring = jsonstring[:-1]
 
         # Now print fetched result
-        print(bcolors.OKBLUE + "--- Builded this json --- \n " + bcolors.ENDC + jsonstring)
+        print(bcolors.OKBLUE + "--- Builded this json --- \n" + bcolors.ENDC + jsonstring + "\n")
 
         json = "{" + \
             '"credit":"' + str(getCreditSQL()) + '",'  + \
@@ -188,37 +214,48 @@ def buildJSON():
         return json
 
     except Exception as e:
-        print(bcolors.FAIL + e + bcolors.ENDC)
+        print(bcolors.FAIL+ str(e) +bcolors.ENDC)
         print(bcolors.FAIL + "Error: unable to fetch data or build json" + bcolors.ENDC)
 
     # disconnect from server
     db.close()
 
-def utf8len(s):
-    return len(s.encode('utf-8'))    
+def encrypt(message, passphrase, IV):
+    # passphrase MUST be 16, 24 or 32 bytes long, how can I do that ?  
+    aes = AES.new(passphrase, AES.MODE_CBC, IV)
+    print(bcolors.HEADER + "--- Enrypted the data succesfully ---\n" + bcolors.ENDC)
+    return b64encode(aes.encrypt(message))
+
+def decrypt(encrypted, passphrase, IV):
+    aes = AES.new(passphrase, AES.MODE_CBC, IV)
+    print(bcolors.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.ENDC)
+    print(b64decode(encrypted))
+    print("aes mit dcode" + aes.decrypt(b64decode(encrypted)))
+    return aes.decrypt(encrypted)
     
 def getLoginCredentials():
     try:
         # get login credentials from outside of webroot
         config = configparser.ConfigParser()
-        config.read('/path-to-config.ini')
+        config.read('/path/to/config/file')
         dbpass = config.get('project-wg-verwaltung','wg_pw')
         dbuser = config.get('project-wg-verwaltung','wg_user')
         dbname = config.get('project-wg-verwaltung','wg_dbname')
         dbtable = config.get('project-wg-verwaltung','wg_dbtable')
         appVersion = config.get('project-wg-verwaltung','wg_app_version')
+        auth = config.get('project-wg-verwaltung','wg_auth')
         dbhost = "localhost"
 
     except Exception as e:
-        print(bcolors.FAIL + e  + bcolors.ENDC)
+        print(bcolors.FAIL + str(e)  + bcolors.ENDC)
         print(bcolors.FAIL + "Error getting values from config file" + bcolors.ENDC)   
 
-    return dbhost, dbuser, dbpass, dbname, dbtable, appVersion
+    return dbhost, dbuser, dbpass, dbname, dbtable, appVersion, auth
 
 
 if __name__ == "__main__":
     try:
-        print(bcolors.OKGREEN + "--- Starting Server ---" + bcolors.ENDC)
+        print(bcolors.OKGREEN + "--- Starting Server ---\n" + bcolors.ENDC)
         listen()
     except KeyboardInterrupt:
         pass
