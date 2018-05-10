@@ -1,0 +1,25 @@
+{
+    "credit": "50.0",
+    "newestAppVersion": "0.4",
+    "expenses": [
+        {
+            "requester": "John",
+            "product": "Spülmittel",
+            "price": "5.0",
+            "date": "01.01.1990"
+        },
+        {
+            "requester": "John",
+            "product": "Fri",
+            "price": "5.0",
+            "date": "01.01.1990"
+        },
+        {
+            "requester": "John",
+            "product": "Spülmittel",
+            "price": "5.0",
+            "date": "01.01.1990"
+        }
+    ]
+}
+
