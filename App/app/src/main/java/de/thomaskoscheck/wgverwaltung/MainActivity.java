@@ -115,8 +115,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataLoaded(ServerResponse serverResponse) {
                 //TODO: Update UI
-                leftCredit.setText(serverResponse.getCredit());
-                Log.d("TK", "Callback received");
+                if(serverResponse != null) {
+                    leftCredit.setText(serverResponse.getCredit());
+                    Log.d("TK", "Callback received");
+                }
             }
         });
         getServerData.execute(new GetDetails(settings));

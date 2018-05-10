@@ -19,26 +19,32 @@ class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
     @Override
     protected ServerResponse doInBackground(GetDetails... params) {
         try {
-            Settings settings=params[0].getSettings();
+            Settings settings = params[0].getSettings();
             Socket socket = new Socket(settings.getServer(), settings.getPort());
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
-            String toWrite = "getServerData";
+            //String toWrite = "getServerData";
+            String toWrite = "abcdefghijklmnop";
             outputStreamWriter.write(StringHelper.getStringWithZeros(toWrite.length(), settings.getAMOUNTOFCHARACTERS()));
-            outputStreamWriter.write(toWrite);
             outputStreamWriter.flush();
 
             InputStream inputStream = socket.getInputStream();
+            String initVector = readStream(inputStream, 16);
+            Log.d("TK", "initVector: " + initVector);
+            String encrypted = Cryptographics.encryptString(toWrite, "bf9a0b105bf549ffe1fc0cb2a5c47389", initVector);
+            outputStreamWriter.write(encrypted);
+            outputStreamWriter.flush();
+
+
             String serverResponseEncrypted = readStream(inputStream, 100000);
+            Log.d("TK", "Serverresponse: "+serverResponseEncrypted);
 
             outputStreamWriter.close();
-            //inputStream.close();
-            //outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
-            //outputStreamWriter.write("quit");
             socket.close();
-            String serverResponseDecrypted = Cryptographics.decryptString(serverResponseEncrypted);
+            String serverResponseDecrypted = Cryptographics.decryptString(serverResponseEncrypted, "bf9a0b105bf549ffe1fc0cb2a5c47389", initVector);
             ServerResponse serverResponse = null;
             try {
-                serverResponse = JsonHandler.parseJson(serverResponseDecrypted);
+                if (serverResponseDecrypted != null)
+                    serverResponse = JsonHandler.parseJson(serverResponseDecrypted);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
