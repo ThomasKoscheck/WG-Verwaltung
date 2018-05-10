@@ -8,6 +8,16 @@ from time import sleep
 import MySQLdb
 from six.moves import configparser
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def listen():
     connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -16,29 +26,43 @@ def listen():
     while True:
         current_connection, address = connection.accept()
         while True:
-            data = current_connection.recv(2048)
+            datalength = current_connection.recv(6)
+            try:   
+                # getting value of the stream that will be send from client           
+                data = current_connection.recv(int(datalength))
 
-            if data == "getServerData":
-                json = buildJSON()
-                current_connection.send(json)
-                print("--- Send Data to Server ---")
+                print(bcolors.OKBLUE + "--- Got this data ---\n>>> "+ bcolors.ENDC  + data)
 
-            if data == "quit”":
+                if data.endswith("getServerData"):
+                    
+                    json = buildJSON()
+                    current_connection.send(json)
+                    print(bcolors.OKGREEN + "--- Sent data to server ---" + bcolors.ENDC)
+
+                    current_connection.shutdown(1)
+                    current_connection.close() 
+                    print(bcolors.OKGREEN + "--- Closed connection ---" + bcolors.ENDC)
+                    break 
+
+
+                else:
+                    print(bcolors.OKBLUE + "Client sent: " + bcolors.ENDC + data)
+
+                    product, requester, price, dates, done = parseJSON(data) # getting parsed data from json send from app
+                    credit = getCreditSQL() # get the actual credit
+                    credit -= price # new credit
+                    insertIntoSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database
+
+                    current_connection.shutdown(1)
+                    current_connection.close()
+                    print("--- Inserted new data in database, now closing connection---")
+                    break
+
+            except Exception as e:    
+                print(bcolors.FAIL + e  + bcolors.ENDC)
+                print(bcolors.FAIL + "Either the data is empty or an other error occured getting data" + bcolors.ENDC)
                 current_connection.shutdown(1)
                 current_connection.close()
-                print("--- Closing Connection because got 'quit' ---")
-
-            else:
-                print("Client send:\n" + data)
-
-                product, requester, price, dates, done = parseJSON(data) # getting parsed data from json send from app
-                credit = getCreditSQL() # get the actual credit
-                credit -= price #new credit
-                insertIntoSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database
-
-                current_connection.shutdown(1)
-                current_connection.close()
-                print("--- Closing Connection ---")
                 break
           
             sleep(1)
@@ -55,8 +79,8 @@ def parseJSON(data):
         return product, requester, price, dates, done
          
     except Exception as e:
-        print(e)
-        print("Error parsing json")
+        print(bcolors.FAIL + e  + bcolors.ENDC)
+        print(bcolors.FAIL + "Error parsing json" + bcolors.ENDC)
     
 def insertIntoSQL(credit, product, requester, price, dates, done):  
     # get login credentials from outside of webroot
@@ -79,8 +103,9 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
         cursor.execute(sql)
         # Commit your changes in the database
         db.commit()
+
     except Exception as e:
-        print(e)
+        print(bcolors.FAIL + e + bcolors.ENDC)
         # Rollback in case there is any error
         db.rollback()
 
@@ -112,8 +137,8 @@ def getCreditSQL():
 
 
     except Exception as e:
-        print(e)
-        print "Error: unable to fetch data"
+        print(bcolors.FAIL + e  + bcolors.ENDC)
+        print("bcolors.FAIL + Error: unable to fetch current credit "+ bcolors.ENDC)
 
     # disconnect from server
     db.close()
@@ -130,7 +155,7 @@ def buildJSON():
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
 
-    sql = "SELECT product, requester, price, date FROM '%s' \
+    sql = "SELECT product, requester, price, date FROM %s \
        WHERE done=0" % (dbtable)
 
     try:
@@ -138,50 +163,62 @@ def buildJSON():
         cursor.execute(sql)
         # Fetch all the rows in a list of lists.
         results = cursor.fetchall()
+        
         jsonstring = ""
+        json = ""
+
         for row in results:
-            jsonstring += '{ "requester":"' + row[0] + '",' + \
-                    '"product":"' + row[1] + '",' + \
-                    '"price":"' + row[2] + '",' +\
-                    '"date":"' + row[3] + '"' + \
+            jsonstring += '{ "requester":"' + str(row[0]) + '",' + \
+                    '"product":"' + str(row[1]) + '",' + \
+                    '"price":"' + str(row[2]) + '",' +\
+                    '"date":"' + str(row[3]) + '"' + \
                     "},"
 
         jsonstring = jsonstring[:-1]
 
         # Now print fetched result
-        print(jsonstring)
+        print(bcolors.OKBLUE + "--- Builded this json --- \n " + bcolors.ENDC + jsonstring)
 
         json = "{" + \
-            '"credit":"' + getCreditSQL() + '",'  + \
-            '"newestAppVersion":"' . appVersion + '",' + \
+            '"credit":"' + str(getCreditSQL()) + '",'  + \
+            '"newestAppVersion":"' + str(appVersion) + '",' + \
             '"expenses":[' + jsonstring + \
             "]}"
 
-    except:
-        print "Error: unable to fetch data"
+        return json
+
+    except Exception as e:
+        print(bcolors.FAIL + e + bcolors.ENDC)
+        print(bcolors.FAIL + "Error: unable to fetch data or build json" + bcolors.ENDC)
 
     # disconnect from server
     db.close()
 
-    return json
+def utf8len(s):
+    return len(s.encode('utf-8'))    
     
 def getLoginCredentials():
-    # get login credentials from outside of webroot
-    config = configparser.ConfigParser()
-    config.read('/path-to-config.ini')
-    dbpass = config.get('project-wg-verwaltung','wg_pw')
-    dbuser = config.get('project-wg-verwaltung','wg_user')
-    dbname = config.get('project-wg-verwaltung','wg_dbname')
-    dbtable = config.get('project-wg-verwaltung','wg_dbtable')
-    appVersion = config.get('project-wg-verwaltung','wg_app_version')
-    dbhost = "localhost"
+    try:
+        # get login credentials from outside of webroot
+        config = configparser.ConfigParser()
+        config.read('/path-to-config.ini')
+        dbpass = config.get('project-wg-verwaltung','wg_pw')
+        dbuser = config.get('project-wg-verwaltung','wg_user')
+        dbname = config.get('project-wg-verwaltung','wg_dbname')
+        dbtable = config.get('project-wg-verwaltung','wg_dbtable')
+        appVersion = config.get('project-wg-verwaltung','wg_app_version')
+        dbhost = "localhost"
+
+    except Exception as e:
+        print(bcolors.FAIL + e  + bcolors.ENDC)
+        print(bcolors.FAIL + "Error getting values from config file" + bcolors.ENDC)   
 
     return dbhost, dbuser, dbpass, dbname, dbtable, appVersion
 
 
 if __name__ == "__main__":
     try:
-        print("--- Starting Server ---")
+        print(bcolors.OKGREEN + "--- Starting Server ---" + bcolors.ENDC)
         listen()
     except KeyboardInterrupt:
         pass
