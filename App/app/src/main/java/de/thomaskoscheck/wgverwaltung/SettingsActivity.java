@@ -10,6 +10,8 @@ import android.widget.EditText;
 public class SettingsActivity extends AppCompatActivity {
     EditText passwordField;
     EditText requesterField;
+    EditText serverField;
+    EditText portField;
     Settings settings;
 
     @Override
@@ -20,6 +22,8 @@ public class SettingsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         passwordField = findViewById(R.id.password);
         requesterField = findViewById(R.id.requester);
+        serverField = findViewById(R.id.server);
+        portField = findViewById(R.id.port);
         settings = SettingsStore.load(this);
         Log.d("TK", "password: " + settings.getPassword() + " requester: " + settings.getRequester());
         passwordField.setText(settings.getPassword());
@@ -30,8 +34,12 @@ public class SettingsActivity extends AppCompatActivity {
         Log.d("TK", "Saving");
         String password = passwordField.getText().toString();
         String requester = requesterField.getText().toString();
-        Log.d("TK", "password: " + password + " requester: " + requester);
+        String server = serverField.getText().toString();
+        int port = Integer.parseInt(portField.getText().toString());
+
         SettingsStore.addValue(getString(R.string.requesterKey), requester, this);
         SettingsStore.addValue(getString(R.string.passwordKey), password, this);
+        SettingsStore.addValue(getString(R.string.serverKey), server, this);
+        SettingsStore.addValue(getString(R.string.portKey), port, this);
     }
 }

@@ -2,7 +2,8 @@ package de.thomaskoscheck.wgverwaltung;
 
 import org.json.*;
 
-public class JsonParser {
+public class JsonHandler {
+
     static ServerResponse parseJson(String json) throws JSONException {
         JSONObject response = new JSONObject(json);
         String credit = response.getString("credit");
@@ -20,5 +21,19 @@ public class JsonParser {
             expenses[i] = new Expense(requester, product, price, done);
         }
         return new ServerResponse(credit, newestAppVersion, expenses);
+    }
+
+    static String generateJsonString(SendDetails sendDetails) {
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("requester", sendDetails.getSettings().getRequester());
+            jsonRequest.put("price", sendDetails.getRequestDetails().getPrice());
+            jsonRequest.put("product", sendDetails.getRequestDetails().getProduct());
+            String jsonString =jsonRequest.toString();
+            return jsonString;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }

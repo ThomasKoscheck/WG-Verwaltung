@@ -18,4 +18,7 @@
     <string name="errorNoProductSet">Please set the product</string>
     <string name="SendConfirmationText">Do you really want to send?</string>
     <string name="SendConfirmation">Send?</string>
+    <string name="serverKey" translatable="false">serverKey</string>
+    <string name="portKey" translatable="false">portKey</string>
+    <string name="serverAddress">Please set the server address</string>
 </resources>

@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
         product = findViewById(R.id.product);
         price = findViewById(R.id.price);
         settings = SettingsStore.load(this);
-        leftCredit = findViewById(R.id.leftCredit);
-        sendRequest("", 0.0);
     }
 
     @Override
@@ -106,19 +104,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendRequest(String description, double price) {
         RequestDetails requestDetails = new RequestDetails(description, price);
-        SendRequestDetails sendRequestDetails = new SendRequestDetails(leftCredit);
-        sendRequestDetails.execute(getGETString(requestDetails));
+        SendRequestDetails sendRequestDetails = new SendRequestDetails();
+        sendRequestDetails.execute(new SendDetails(settings, requestDetails));
     }
-
-
-    private String getGETString(RequestDetails requestDetails) {
-        Settings settings = SettingsStore.load(this);
-        String GETData = "?";
-        GETData += "product=" + requestDetails.getProduct() + "&";
-        GETData += "price=" + requestDetails.getPrice() + "&";
-        GETData += "requester=" + settings.getRequester() + "&";
-        GETData += "password=" + settings.getPassword();
-        Log.d("TK", GETData);
-        return GETData;
+    private void fetchDataFromServer(){
+        GetServerData getServerData = new GetServerData();
     }
 }

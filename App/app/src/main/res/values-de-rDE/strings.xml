@@ -15,4 +15,5 @@
     <string name="errorNoProductSet">Bitte gib das Produkt ein</string>
     <string name="SendConfirmation">Senden?</string>
     <string name="SendConfirmationText">Willst du wirklich senden?</string>
+    <string name="serverAddress">Bitte gebe die Server Addresse ein</string>
 </resources>

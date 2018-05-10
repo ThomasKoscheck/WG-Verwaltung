@@ -15,11 +15,18 @@ public class SettingsStore {
         editor.apply();
     }
 
+    public static void addValue(String key, int value, Context context){
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putInt(key, value);
+        editor.apply();
+    }
+
     public static Settings load(Context context){
         SharedPreferences sharedPreferences = getSharedPreferences(context);
         String password = sharedPreferences.getString(context.getString(R.string.passwordKey), null);
         String requester = sharedPreferences.getString(context.getString(R.string.requesterKey), null);
-        return new Settings(requester, password);
+        String server = sharedPreferences.getString(context.getString(R.string.serverKey), null);
+        int port = sharedPreferences.getInt(context.getString(R.string.portKey), 0);
+        return new Settings(requester, password, server, port);
     }
-
 }
