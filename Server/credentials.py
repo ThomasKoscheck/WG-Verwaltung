@@ -8,7 +8,7 @@ def configHandler():
     try:
         # get login credentials from outside of webroot
         config = configparser.ConfigParser()
-        handler = config.read('/var/www/thomaskoscheck.de/credentials/config.ini')
+        handler = config.read('pathh-to-config-ini-file')
         return handler
 
     except Exception as e:
