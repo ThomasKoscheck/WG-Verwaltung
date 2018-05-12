@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         product = findViewById(R.id.product);
         price = findViewById(R.id.price);
-        settings = SettingsStore.load(this);
         leftCredit = findViewById(R.id.leftCredit);
-        sendRequest("yoyo", 1);
+        settings = SettingsStore.load(this);
+        fetchDataFromServer();
     }
 
     @Override
@@ -106,19 +106,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendRequest(String description, double price) {
         RequestDetails requestDetails = new RequestDetails(description, price);
-        SendRequestDetails sendRequestDetails = new SendRequestDetails(leftCredit);
-        sendRequestDetails.execute(getGETString(requestDetails));
+        SendRequestDetails sendRequestDetails = new SendRequestDetails();
+        sendRequestDetails.execute(new SendDetails(settings, requestDetails));
     }
-
-
-    private String getGETString(RequestDetails requestDetails) {
-        Settings settings = SettingsStore.load(this);
-        String GETData = "?";
-        GETData += "product=" + requestDetails.getProduct() + "&";
-        GETData += "price=" + requestDetails.getPrice() + "&";
-        GETData += "requester=" + settings.getRequester() + "&";
-        GETData += "password=" + settings.getPassword();
-        Log.d("TK", GETData);
-        return GETData;
+    private void fetchDataFromServer(){
+        GetServerData getServerData = new GetServerData();
+        getServerData.setDataProcessedListener(new DataProcessedListener() {
+            @Override
+            public void onDataLoaded(ServerResponse serverResponse) {
+                //TODO: Update UI
+                if(serverResponse != null) {
+                    leftCredit.setText(serverResponse.getCredit());
+                    Log.d("TK", "Callback received");
+                }
+            }
+        });
+        getServerData.execute(new GetDetails(settings));
     }
 }

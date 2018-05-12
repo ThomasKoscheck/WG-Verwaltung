@@ -19,4 +19,7 @@
     <string name="SendConfirmationText">Do you really want to send?</string>
     <string name="SendConfirmation">Send?</string>
     <string name="errorParsingTheJson">An error happened please check your network connection</string>
+    <string name="serverKey" translatable="false">serverKey</string>
+    <string name="portKey" translatable="false">portKey</string>
+    <string name="serverAddress">Please set the server address</string>
 </resources>

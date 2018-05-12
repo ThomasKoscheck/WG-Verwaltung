@@ -1,62 +1,46 @@
 package de.thomaskoscheck.wgverwaltung;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.TextView;
-import org.json.JSONException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.net.URL;
+import java.net.Socket;
 
-import javax.net.ssl.HttpsURLConnection;
+public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
 
-public class SendRequestDetails extends AsyncTask<String, Void, ServerResponse> {
-    private TextView leftCredit;
+    @Override
+    protected Boolean doInBackground(SendDetails... params) {
+        try {
+            Settings settings= params[0].getSettings();
+            Socket socket = new Socket(settings.getServer(), settings.getPort());
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
+            String rawJsonString = JsonHandler.generateJsonString(params[0]);
 
-    SendRequestDetails(TextView textView) {
-        this.leftCredit = textView;
+            InputStream inputStream = socket.getInputStream();
+            String initVector = readStream(inputStream, 32);
+
+
+            String encryptedJsonString = Cryptographics.encryptString(rawJsonString, settings.getPassword(), initVector);
+            outputStreamWriter.write(encryptedJsonString);
+            outputStreamWriter.write(StringHelper.getStringWithZeros(encryptedJsonString.length(), settings.getAMOUNTOFCHARACTERS()));
+            socket.close();
+            outputStreamWriter.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    protected ServerResponse doInBackground(String... params) {
-        InputStream stream;
-        String result = "";
-        try {
-            URL url = new URL("https://thomaskoscheck.de/projekte/wg-verwaltung/index.php" + params[0]);
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode != HttpsURLConnection.HTTP_OK) {
-                throw new IOException("HTTP error code: " + responseCode);
-            }
-            // Retrieve the response body as an InputStream.
-            stream = connection.getInputStream();
-            if (stream != null) {
-                // Converts Stream to String with max length of 500.
-                result = readStream(stream, 1000000);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.e("TK", result);
-        ServerResponse serverResponse = null;
-        try {
-            serverResponse = JsonParser.parseJson(result);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return serverResponse;
+    protected void onPostExecute(Boolean succeeded) {
+        super.onPostExecute(succeeded);
     }
 
-    /**
-     * Converts the contents of an InputStream to a String.
-     */
-    public String readStream(InputStream stream, int maxReadSize)
-            throws IOException {
+    private String readStream(InputStream stream, int maxReadSize) throws IOException {
         Reader reader;
         reader = new InputStreamReader(stream, "UTF-8");
         char[] rawBuffer = new char[maxReadSize];
@@ -70,16 +54,5 @@ public class SendRequestDetails extends AsyncTask<String, Void, ServerResponse> 
             maxReadSize -= readSize;
         }
         return buffer.toString();
-    }
-
-    @Override
-    protected void onPostExecute(ServerResponse result) {
-        super.onPostExecute(result);
-        if(result!=null) {
-            leftCredit.setText(result.getCredit());
-        }
-        else{
-            leftCredit.setText(leftCredit.getContext().getText(R.string.errorParsingTheJson));
-        }
     }
 }

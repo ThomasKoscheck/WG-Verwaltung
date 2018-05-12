@@ -17,5 +17,7 @@
     <string name="errorParsingTheJson">Ein Fehler ist aufgetreten, bitte überprüfe deine Netzwerkverbindung</string>
     <string name="SendConfirmationText">Wirklich senden?</string>
     <string name="SendConfirmation">Senden?</string>
+    <string name="SendConfirmationText">Willst du wirklich senden?</string>
+    <string name="serverAddress">Bitte gebe die Server Addresse ein</string>
     <string name="SendConfirmation">Senden</string>
 </resources>
