@@ -39,6 +39,11 @@ class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
 
             String serverResponseDecrypted = getDecryptedServerData();
 
+            Log.d("TK", "decryptedServerData: " + serverResponseDecrypted);
+            inputStream.close();
+            outputStream.close();
+            socket.close();
+
             return getServerResponse(serverResponseDecrypted);
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,6 +92,7 @@ class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
 
     private String getDecryptedServerData() throws IOException {
         String serverResponseEncrypted = readStream(100000);
+        Log.d("TK", "encryptedServerData: " + serverResponseEncrypted);
         return Cryptographics.decryptString(serverResponseEncrypted, passphraseHex, initVector);
     }
 
