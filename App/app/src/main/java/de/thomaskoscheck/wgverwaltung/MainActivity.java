@@ -1,6 +1,7 @@
 package de.thomaskoscheck.wgverwaltung;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     EditText price;
     Settings settings;
     TextView leftCredit;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         leftCredit = findViewById(R.id.leftCredit);
         settings = SettingsStore.load(this);
-        fetchDataFromServer();
+        context = this;
     }
 
     @Override
@@ -59,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    protected void onResume() {
+        super.onResume();
+        fetchDataFromServer();
+    }
+
 
     public void clear(View view) {
         clearInput();
@@ -89,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refreshLeftCredit(View view) {
+        Toast refreshing = Toast.makeText(this, R.string.refreshing, Toast.LENGTH_SHORT);
+        refreshing.show();
         fetchDataFromServer();
     }
 
@@ -125,18 +136,18 @@ public class MainActivity extends AppCompatActivity {
                 if(serverResponse != null) {
                     leftCredit.setText(serverResponse.getCredit());
 
-                    PackageInfo pInfo = null;
                     try {
+                        PackageInfo pInfo;
                         pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                         String version = pInfo.versionName;
-                        if(serverResponse.getNewestAppVersion() != version){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                        if(!serverResponse.getNewestAppVersion().equals(version)){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
                             builder.setTitle(R.string.oldAppVersionTitle);
                             builder.setMessage(R.string.oldAppVersion);
 
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    //TODO: implement download of new app version
+                                    //TODO: download and install new app version
                                 }
                             });
 
@@ -145,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
 
-                            builder.setIcon(android.R.drawable.ic_input_add);
+                            builder.setIcon(android.R.drawable.stat_sys_warning);
                             builder.show();
                         }
                     } catch (PackageManager.NameNotFoundException e) {
