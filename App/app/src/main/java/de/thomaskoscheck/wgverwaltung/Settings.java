@@ -5,12 +5,14 @@ class Settings {
     private String requester;
     private String server;
     private int port;
-    private int AMOUNTOFCHARACTERS=6;
+    private final int AMOUNTOFCHARACTERS = 6;
+    private final int initVectorLength = 16;
+
 
     Settings(String requester, String password, String server, int port) {
         this.password = password;
         this.requester = requester;
-        this.server=server;
+        this.server = server;
         this.port = port;
     }
 
@@ -46,7 +48,11 @@ class Settings {
         this.port = port;
     }
 
-    public int getAMOUNTOFCHARACTERS() {
+    public int getAmountOfCharacters() {
         return AMOUNTOFCHARACTERS;
+    }
+
+    public int getInitVectorLength() {
+        return initVectorLength;
     }
 }

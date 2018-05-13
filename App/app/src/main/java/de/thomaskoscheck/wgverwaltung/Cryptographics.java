@@ -1,6 +1,7 @@
 package de.thomaskoscheck.wgverwaltung;
 
 import android.util.Base64;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -31,6 +32,29 @@ public class Cryptographics {
             stringBuilder.append("?");
         }
         return stringBuilder.toString();
+    }
+
+
+    static byte[] generateHexPassphrase(String passphrase) {
+        StringBuilder stringBuilder = new StringBuilder(passphrase);
+        int passphraseLength = passphrase.length();
+        if (passphraseLength < 16) {
+            while (passphraseLength != 16) {
+                stringBuilder.append("?");
+                passphraseLength++;
+            }
+        } else if (passphraseLength < 24) {
+            while (passphraseLength != 24) {
+                stringBuilder.append("?");
+                passphraseLength++;
+            }
+        } else if (passphraseLength < 32){
+            while (passphraseLength != 32) {
+                stringBuilder.append("?");
+                passphraseLength++;
+            }
+        }
+        return stringBuilder.toString().getBytes();
     }
 
     static String decryptString(String encryptedString, byte[] key, String initVector) {

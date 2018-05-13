@@ -30,7 +30,7 @@ class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
             socket = new Socket(settings.getServer(), settings.getPort());
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
-            passphraseHex = generateHexPassphrase(settings.getPassword());
+            passphraseHex = Cryptographics.generateHexPassphrase(settings.getPassword());
             initVector = getInitVector();
 
 
@@ -51,36 +51,13 @@ class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
         }
     }
 
-    private byte[] generateHexPassphrase(String passphrase) {
-        StringBuilder stringBuilder = new StringBuilder(passphrase);
-        int passphraseLength = passphrase.length();
-        if (passphraseLength < 16) {
-            while (passphraseLength != 16) {
-                stringBuilder.append("?");
-                passphraseLength++;
-            }
-        } else if (passphraseLength < 24) {
-            while (passphraseLength != 24) {
-                stringBuilder.append("?");
-                passphraseLength++;
-            }
-        } else if (passphraseLength < 32){
-            while (passphraseLength != 32) {
-                stringBuilder.append("?");
-                passphraseLength++;
-            }
-        }
-        Log.d("TK", "passphrase: "+stringBuilder.toString());
-        return stringBuilder.toString().getBytes();
-    }
-
     private String getInitVector() throws IOException {
-        return readStream(16);
+        return readStream(settings.getInitVectorLength());
     }
 
     private void writeEncryptedData(String data) throws IOException {
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-        String filledWithZeroes = StringHelper.getStringWithZeros(data.length(), settings.getAMOUNTOFCHARACTERS());
+        String filledWithZeroes = StringHelper.getStringWithZeros(data.length(), settings.getAmountOfCharacters());
         outputStreamWriter.write(filledWithZeroes);
         outputStreamWriter.flush();
 

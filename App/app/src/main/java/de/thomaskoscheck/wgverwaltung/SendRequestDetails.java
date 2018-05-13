@@ -6,30 +6,37 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
+    private Settings settings;
+    private Socket socket;
+    private InputStream inputStream;
+    private OutputStream outputStream;
+    private byte[] passphraseHex;
+    private String initVector;
 
     @Override
     protected Boolean doInBackground(SendDetails... params) {
         try {
-            Settings settings= params[0].getSettings();
-            Socket socket = new Socket(settings.getServer(), settings.getPort());
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
+            settings= params[0].getSettings();
+            socket = new Socket(settings.getServer(), settings.getPort());
+            outputStream = socket.getOutputStream();
+            inputStream = socket.getInputStream();
+            passphraseHex = Cryptographics.generateHexPassphrase(settings.getPassword());
+            initVector = getInitVector();
 
             String rawJsonString = JsonHandler.generateJsonString(params[0]);
+            String encryptedJsonString = Cryptographics.encryptString(rawJsonString, passphraseHex, initVector);
 
-            InputStream inputStream = socket.getInputStream();
-            String initVector = readStream(inputStream, 16);
+            writeEncryptedData(encryptedJsonString);
 
-            byte[] keyHex = generateHexPassphrase(settings.getPassword());
-            String encryptedJsonString = Cryptographics.encryptString(rawJsonString, keyHex, initVector);
-            outputStreamWriter.write(StringHelper.getStringWithZeros(encryptedJsonString.length(), settings.getAMOUNTOFCHARACTERS()));
-            outputStreamWriter.write(encryptedJsonString);
-            outputStreamWriter.close();
+            inputStream.close();
+            outputStream.close();
             socket.close();
             return true;
         } catch (Exception e) {
@@ -38,38 +45,24 @@ public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
         }
     }
 
-
-    private byte[] generateHexPassphrase(String passphrase) {
-        StringBuilder stringBuilder = new StringBuilder(passphrase);
-        int passphraseLength = passphrase.length();
-        if (passphraseLength < 16) {
-            while (passphraseLength != 16) {
-                stringBuilder.append("?");
-                passphraseLength++;
-            }
-        } else if (passphraseLength < 24) {
-            while (passphraseLength != 24) {
-                stringBuilder.append("?");
-                passphraseLength++;
-            }
-        } else if (passphraseLength < 32){
-            while (passphraseLength != 32) {
-                stringBuilder.append("?");
-                passphraseLength++;
-            }
-        }
-        Log.d("TK", "passphrase: "+stringBuilder.toString());
-        return stringBuilder.toString().getBytes();
+    private String getInitVector() throws IOException {
+        return readStream(settings.getInitVectorLength());
     }
 
-    @Override
-    protected void onPostExecute(Boolean succeeded) {
-        super.onPostExecute(succeeded);
+    private void writeEncryptedData(String data) throws IOException {
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+        String filledWithZeroes = StringHelper.getStringWithZeros(data.length(), settings.getAmountOfCharacters());
+        outputStreamWriter.write(filledWithZeroes);
+        outputStreamWriter.flush();
+
+        Log.d("TK", "encrypted: " + data);
+        outputStreamWriter.write(data);
+        outputStreamWriter.flush();
     }
 
-    private String readStream(InputStream stream, int maxReadSize) throws IOException {
+    private String readStream(int maxReadSize) throws IOException {
         Reader reader;
-        reader = new InputStreamReader(stream, "UTF-8");
+        reader = new InputStreamReader(inputStream, "UTF-8");
         char[] rawBuffer = new char[maxReadSize];
         int readSize;
         StringBuffer buffer = new StringBuffer();
@@ -82,4 +75,11 @@ public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
         }
         return buffer.toString();
     }
+
+    @Override
+    protected void onPostExecute(Boolean succeeded) {
+        super.onPostExecute(succeeded);
+    }
+
+
 }
