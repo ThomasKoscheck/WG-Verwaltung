@@ -20,4 +20,5 @@
     <string name="settingsSaved">Einstellungen erfolgreich gespeichert</string>
     <string name="oldAppVersion">Es gibt eine neue Version bitte installiere sie</string>
     <string name="oldAppVersionTitle">Update verfügbar</string>
+    <string name="refreshing">Aktualisiere</string>
 </resources>
