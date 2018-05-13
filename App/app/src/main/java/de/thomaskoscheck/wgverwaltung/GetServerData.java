@@ -87,7 +87,6 @@ class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
         Log.d("TK", "encrypted: " + data);
         outputStreamWriter.write(data);
         outputStreamWriter.flush();
-        outputStreamWriter.close();
     }
 
     private String getDecryptedServerData() throws IOException {
