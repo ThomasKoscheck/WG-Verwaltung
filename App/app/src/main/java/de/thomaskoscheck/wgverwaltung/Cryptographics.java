@@ -1,43 +1,47 @@
 package de.thomaskoscheck.wgverwaltung;
 
+import android.util.Base64;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
-
 public class Cryptographics {
-    static String encryptString(String rawString, String key, String initVector){
+    static String encryptString(String rawString, byte[] key, String initVector) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException {
+        IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+        SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+        byte[] encrypted = cipher.doFinal(generatedPaddedString(rawString).getBytes());
+
+        return Base64.encodeToString(encrypted, Base64.DEFAULT);
+    }
+
+    private static String generatedPaddedString(String input) {
+        StringBuilder stringBuilder = new StringBuilder(input);
+        while (stringBuilder.length() % 16 != 0) {
+            stringBuilder.append("?");
+        }
+        return stringBuilder.toString();
+    }
+
+    static String decryptString(String encryptedString, byte[] key, String initVector) {
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-
-            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
-            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-
-            byte[] encrypted = cipher.doFinal(rawString.getBytes());
-            //System.out.println("encrypted string: " + Base64.encodeBase64String(encrypted));
-
-
-            //return StringUtils.newStringUsAscii(encodeBase64(binaryData, false));
-            return StringUtils.newStringUsAscii(Base64.encodeBase64(encrypted));
-            // return Base64.encodeToString(encrypted, Base64.NO_PADDING);
-            // return Base64.encode(encrypted, Base64.NO_PADDING);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-    static String decryptString(String encryptedString, String key, String initVector){
-                try {
-            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+            SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
 
             Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 
-            byte[] original = cipher.doFinal(Base64.decodeBase64(encryptedString));
+            byte[] original = cipher.doFinal(Base64.decode(encryptedString, Base64.DEFAULT));
 
             return new String(original);
         } catch (Exception ex) {

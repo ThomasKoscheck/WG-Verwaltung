@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
 
@@ -20,10 +21,10 @@ public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
             String rawJsonString = JsonHandler.generateJsonString(params[0]);
 
             InputStream inputStream = socket.getInputStream();
-            String initVector = readStream(inputStream, 32);
+            String initVector = readStream(inputStream, 16);
 
 
-            String encryptedJsonString = Cryptographics.encryptString(rawJsonString, settings.getPassword(), initVector);
+            String encryptedJsonString = Cryptographics.encryptString(rawJsonString, settings.getPassword().getBytes(StandardCharsets.UTF_8), initVector);
             outputStreamWriter.write(encryptedJsonString);
             outputStreamWriter.write(StringHelper.getStringWithZeros(encryptedJsonString.length(), settings.getAMOUNTOFCHARACTERS()));
             socket.close();

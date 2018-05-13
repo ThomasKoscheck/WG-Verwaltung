@@ -20,15 +20,33 @@ def generateIV(length):
 
 def encrypt(message, passphrase, IV):
     # passphrase MUST be 16, 24 or 32 bytes long, how can I do that ?  
+    print("Key: " + passphrase)
+    passphrase = padPassphrase(passphrase)
+    print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
-    print("Key: " +passphrase)
     print(bcolors.HEADER + "--- Encrypted the data succesfully ---\n" + bcolors.ENDC)
     encrypted = b64encode(aes.encrypt(message))
     return encrypted
 
 def decrypt(encrypted, passphrase, IV):
+    print("Key: " + passphrase)
+    passphrase = padPassphrase(passphrase)
+    print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
-    print("Key: " +passphrase)
     print(bcolors.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.ENDC)
     decrypted = aes.decrypt(b64decode(encrypted))
     return decrypted
+
+def padPassphrase(passphrase):
+    if len(passphrase) < 16:
+        while(len(passphrase)!=16):
+            passphrase += "?"
+    elif len(passphrase) < 24:
+        while(len(passphrase)!=24):
+            passphrase += "?"
+    elif len(passphrase) < 32:
+        while(len(passphrase)!=32):
+            passphrase += "?"
+    else:
+        print("passphrase too long")
+    return passphrase
