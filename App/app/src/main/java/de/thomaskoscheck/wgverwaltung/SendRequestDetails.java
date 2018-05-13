@@ -1,6 +1,7 @@
 package de.thomaskoscheck.wgverwaltung;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,22 +19,47 @@ public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
             Settings settings= params[0].getSettings();
             Socket socket = new Socket(settings.getServer(), settings.getPort());
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
+
             String rawJsonString = JsonHandler.generateJsonString(params[0]);
 
             InputStream inputStream = socket.getInputStream();
             String initVector = readStream(inputStream, 16);
 
-
-            String encryptedJsonString = Cryptographics.encryptString(rawJsonString, settings.getPassword().getBytes(StandardCharsets.UTF_8), initVector);
-            outputStreamWriter.write(encryptedJsonString);
+            byte[] keyHex = generateHexPassphrase(settings.getPassword());
+            String encryptedJsonString = Cryptographics.encryptString(rawJsonString, keyHex, initVector);
             outputStreamWriter.write(StringHelper.getStringWithZeros(encryptedJsonString.length(), settings.getAMOUNTOFCHARACTERS()));
-            socket.close();
+            outputStreamWriter.write(encryptedJsonString);
             outputStreamWriter.close();
+            socket.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    private byte[] generateHexPassphrase(String passphrase) {
+        StringBuilder stringBuilder = new StringBuilder(passphrase);
+        int passphraseLength = passphrase.length();
+        if (passphraseLength < 16) {
+            while (passphraseLength != 16) {
+                stringBuilder.append("?");
+                passphraseLength++;
+            }
+        } else if (passphraseLength < 24) {
+            while (passphraseLength != 24) {
+                stringBuilder.append("?");
+                passphraseLength++;
+            }
+        } else if (passphraseLength < 32){
+            while (passphraseLength != 32) {
+                stringBuilder.append("?");
+                passphraseLength++;
+            }
+        }
+        Log.d("TK", "passphrase: "+stringBuilder.toString());
+        return stringBuilder.toString().getBytes();
     }
 
     @Override
