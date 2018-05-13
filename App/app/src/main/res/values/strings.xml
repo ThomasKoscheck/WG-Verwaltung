@@ -22,4 +22,7 @@
     <string name="serverKey" translatable="false">serverKey</string>
     <string name="portKey" translatable="false">portKey</string>
     <string name="serverAddress">Please set the server address</string>
+    <string name="settingsSaved">Successfully saved settings</string>
+    <string name="oldAppVersionTitle">Update available</string>
+    <string name="oldAppVersion">There is a new version available, please install it</string>
 </resources>

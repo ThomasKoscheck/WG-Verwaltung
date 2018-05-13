@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
     EditText passwordField;
@@ -18,25 +22,43 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_activty);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         passwordField = findViewById(R.id.password);
         requesterField = findViewById(R.id.requester);
         serverField = findViewById(R.id.server);
         portField = findViewById(R.id.port);
 
+        portField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    save();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
         settings = SettingsStore.load(this);
         Log.d("TK", "password: " + settings.getPassword() + " requester: " + settings.getRequester());
         passwordField.setText(settings.getPassword());
         requesterField.setText(settings.getRequester());
         serverField.setText(settings.getServer());
-        portField.setText(String.valueOf(settings.getPort()));
+        if(settings.getPort()!=0) {
+            portField.setText(String.valueOf(settings.getPort()));
+        }
     }
 
     public void save(View view) {
+        save();
+    }
+
+    private void save(){
         Log.d("TK", "Saving");
-        String password = passwordField.getText().toString();
         String requester = requesterField.getText().toString();
+        String password = passwordField.getText().toString();
         String server = serverField.getText().toString();
         int port = Integer.parseInt(portField.getText().toString());
 
@@ -44,5 +66,12 @@ public class SettingsActivity extends AppCompatActivity {
         SettingsStore.addValue(getString(R.string.passwordKey), password, this);
         SettingsStore.addValue(getString(R.string.serverKey), server, this);
         SettingsStore.addValue(getString(R.string.portKey), port, this);
+
+        settings.setRequester(requester);
+        settings.setPassword(password);
+        settings.setServer(server);
+        settings.setPort(port);
+        Toast settingsSaved = Toast.makeText(this, R.string.settingsSaved, Toast.LENGTH_LONG);
+        settingsSaved.show();
     }
 }

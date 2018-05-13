@@ -3,6 +3,8 @@ package de.thomaskoscheck.wgverwaltung;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -82,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             buildAlertDialog(priceString, productString);
         }
+        clearInput();
+        fetchDataFromServer();
+    }
+
+    public void refreshLeftCredit(View view) {
+        fetchDataFromServer();
     }
 
     private void buildAlertDialog(final String priceString, final String productString){
@@ -114,9 +122,35 @@ public class MainActivity extends AppCompatActivity {
         getServerData.setDataProcessedListener(new DataProcessedListener() {
             @Override
             public void onDataLoaded(ServerResponse serverResponse) {
-                //TODO: Update UI
                 if(serverResponse != null) {
                     leftCredit.setText(serverResponse.getCredit());
+
+                    PackageInfo pInfo = null;
+                    try {
+                        pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                        String version = pInfo.versionName;
+                        if(serverResponse.getNewestAppVersion() != version){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                            builder.setTitle(R.string.oldAppVersionTitle);
+                            builder.setMessage(R.string.oldAppVersion);
+
+                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO: implement download of new app version
+                                }
+                            });
+
+                            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+
+                            builder.setIcon(android.R.drawable.ic_input_add);
+                            builder.show();
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     Log.d("TK", "Callback received");
                 }
             }
