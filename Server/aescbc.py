@@ -5,6 +5,7 @@ from Crypto import Random
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 from os import urandom
+import bcolors
 
 def generatePadding(data):
     while len(data)%16 != 0:
@@ -24,7 +25,7 @@ def encrypt(message, passphrase, IV):
     passphrase = padPassphrase(passphrase)
     print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
-    print(bcolors.HEADER + "--- Encrypted the data succesfully ---\n" + bcolors.ENDC)
+    print(bcolors.color.HEADER + "--- Encrypted the data succesfully ---\n" + bcolors.color.ENDC)
     encrypted = b64encode(aes.encrypt(message))
     return encrypted
 
@@ -33,7 +34,7 @@ def decrypt(encrypted, passphrase, IV):
     passphrase = padPassphrase(passphrase)
     print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
-    print(bcolors.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.ENDC)
+    print(bcolors.color.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.color.ENDC)
     decrypted = aes.decrypt(b64decode(encrypted))
     return decrypted
 
