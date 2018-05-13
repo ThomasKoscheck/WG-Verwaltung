@@ -6,3 +6,5 @@ App/\.idea/gradle\.xml
 App/\.idea/misc\.xml
 
 App/\.idea/runConfigurations\.xml
+
+*.pyc
