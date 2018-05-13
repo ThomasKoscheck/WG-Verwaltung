@@ -8,8 +8,8 @@ def configHandler():
     try:
         # get login credentials from outside of webroot
         config = configparser.ConfigParser()
-        handler = config.read('pathh-to-config-ini-file')
-        return handler
+        config.read('/path-to-config-ini-file')
+        return config
 
     except Exception as e:
         print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
