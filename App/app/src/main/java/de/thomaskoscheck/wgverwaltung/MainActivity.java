@@ -6,11 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -20,11 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    EditText product;
-    EditText price;
-    Settings settings;
-    TextView leftCredit;
-    Context context;
+    private EditText product;
+    private EditText price;
+    private Settings settings;
+    private TextView leftCredit;
+    private Context context;
+    private boolean alertDialogResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +90,10 @@ public class MainActivity extends AppCompatActivity {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
         } else {
-            buildAlertDialog(priceString, productString);
+            buildAlertDialog(R.string.SendConfirmation, R.string.SendConfirmationText, android.R.string.yes, android.R.string.no, android.R.drawable.ic_input_add);
+            if(alertDialogResult){
+                sendRequest(productString, Double.parseDouble(priceString));
+            }
         }
         clearInput();
         fetchDataFromServer();
@@ -103,24 +105,28 @@ public class MainActivity extends AppCompatActivity {
         fetchDataFromServer();
     }
 
-    private void buildAlertDialog(final String priceString, final String productString){
+    private void buildAlertDialog(int titleId, int messageId, int positiveButtonId, int negativeButtonId, int iconId){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        builder.setTitle(R.string.SendConfirmation);
-        builder.setMessage(R.string.SendConfirmationText);
+        builder.setTitle(titleId);
+        builder.setMessage(messageId);
 
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(positiveButtonId, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                double price = Double.parseDouble(priceString);
-                sendRequest(productString, price);
+                setAlertDialogResult(true);
             }
         });
 
-        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(negativeButtonId, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                setAlertDialogResult(false);
             }
         });
-        builder.setIcon(android.R.drawable.ic_input_add);
+        builder.setIcon(iconId);
         builder.show();
+    }
+
+    private void setAlertDialogResult(boolean result){
+        alertDialogResult=result;
     }
 
     private void sendRequest(String description, double price) {
@@ -135,29 +141,12 @@ public class MainActivity extends AppCompatActivity {
             public void onDataLoaded(ServerResponse serverResponse) {
                 if(serverResponse != null) {
                     leftCredit.setText(serverResponse.getCredit());
-
                     try {
                         PackageInfo pInfo;
                         pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                         String version = pInfo.versionName;
                         if(!serverResponse.getNewestAppVersion().equals(version)){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
-                            builder.setTitle(R.string.oldAppVersionTitle);
-                            builder.setMessage(R.string.oldAppVersion);
-
-                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //TODO: download and install new app version
-                                }
-                            });
-
-                            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-
-                            builder.setIcon(android.R.drawable.stat_sys_warning);
-                            builder.show();
+                            buildAlertDialog(R.string.oldAppVersionTitle, R.string.oldAppVersion, android.R.string.ok, android.R.string.no, android.R.drawable.stat_sys_warning);
                         }
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
