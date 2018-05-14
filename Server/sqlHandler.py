@@ -21,14 +21,17 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
 
-    # Prepare SQL query to INSERT a record into the database.
-    sql = "INSERT INTO %s (credit, product, requester, price, date, done) \
-       VALUES ('%f', '%s', '%s', '%f', '%s', '%i' )" % \
-       (dbtable, credit, product, requester, price, dates, done)
+    #   sql = "INSERT INTO %s (credit, product, requester, price, date, done) \
+      # VALUES ('%f', '%s', '%s', '%f', '%s', '%i' )" % \
+       #(dbtable, credit, product, requester, price, dates, done)
 
+    # Prepare SQL query to INSERT a record into the database.
+    sql = 'INSERT INTO %s (credit, product, requester, price, date, done)' % (dbtable)
+    sql = sql + ' VALUES (%s, %s, %s, %s, %s, %s)'
+    
     try:
         # Execute the SQL command
-        cursor.execute(sql)
+        cursor.execute(sql, (credit, product, requester, price, dates, done))
         # Commit your changes in the database
         db.commit()
 
