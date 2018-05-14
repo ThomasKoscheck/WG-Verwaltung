@@ -18,8 +18,4 @@ public class ServerResponse {
     public String getNewestAppVersion() {
         return newestAppVersion;
     }
-
-    public Expense[] getExpenses() {
-        return expenses;
-    }
 }

@@ -5,7 +5,7 @@
     <string name="save">Speichern</string>
     <string name="requester">Dein Name hier</string>
     <string name="price">Preis</string>
-    <string name="password">Du musst Thomas nach dem Passwort fragen</string>
+    <string name="password">Frage den Server Admin nach dem Passwort</string>
     <string name="expenseDescription">Beschreibung der Ausgabe</string>
     <string name="clear">Form Leeren</string>
     <string name="action_settings">Einstellungen</string>
@@ -16,10 +16,11 @@
     <string name="errorParsingTheJson">Ein Fehler ist aufgetreten, bitte überprüfe deine Netzwerkverbindung</string>
     <string name="SendConfirmationText">Wirklich senden?</string>
     <string name="SendConfirmation">Senden?</string>
-    <string name="serverAddress">Bitte gebe die Server Addresse ein</string>
+    <string name="serverAddress">Bitte gebe die Server Adresse ein</string>
     <string name="settingsSaved">Einstellungen erfolgreich gespeichert</string>
     <string name="oldAppVersion">Es gibt eine neue Version bitte installiere sie</string>
     <string name="oldAppVersionTitle">Update verfügbar</string>
     <string name="refreshing">Aktualisiere</string>
     <string name="port">Bitte gib die Port Nummer ein</string>
+    <string name="title_activity_settings_activity">Einstellungen</string>
 </resources>

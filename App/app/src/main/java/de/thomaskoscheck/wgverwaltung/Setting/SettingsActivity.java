@@ -3,7 +3,6 @@ package de.thomaskoscheck.wgverwaltung.Setting;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_activty);
+        setContentView(R.layout.activity_settings_activity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         passwordField = findViewById(R.id.password);
@@ -44,7 +43,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         settings = SettingsStore.load(this);
-        Log.d("TK", "password: " + settings.getPassword() + " requester: " + settings.getRequester());
         passwordField.setText(settings.getPassword());
         requesterField.setText(settings.getRequester());
         serverField.setText(settings.getServer());
@@ -58,7 +56,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void save(){
-        Log.d("TK", "Saving");
         String requester = requesterField.getText().toString();
         String password = passwordField.getText().toString();
         String server = serverField.getText().toString();

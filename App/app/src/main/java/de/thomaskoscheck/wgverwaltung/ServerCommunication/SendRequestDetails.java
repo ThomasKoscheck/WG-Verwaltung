@@ -1,7 +1,6 @@
 package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +60,6 @@ public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
         outputStreamWriter.write(filledWithZeroes);
         outputStreamWriter.flush();
 
-        Log.d("TK", "encrypted: " + data);
         outputStreamWriter.write(data);
         outputStreamWriter.flush();
     }

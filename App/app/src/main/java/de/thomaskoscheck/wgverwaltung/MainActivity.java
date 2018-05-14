@@ -1,7 +1,6 @@
 package de.thomaskoscheck.wgverwaltung;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -174,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Log.d("TK", "Callback received");
                 }
             }
         });
