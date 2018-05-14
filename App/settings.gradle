@@ -1,1 +1,1 @@
-include ':app', ':commons-codec-1.11'
+include ':app'
