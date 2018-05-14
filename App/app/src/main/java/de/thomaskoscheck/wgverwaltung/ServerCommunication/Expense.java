@@ -1,11 +1,11 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
-class Expense {
+public class Expense {
     private String requester;
     private String product;
     private double price;
 
-    Expense(String requester, String product, double price) {
+    public Expense(String requester, String product, double price) {
         this.requester = requester;
         this.product = product;
         this.price = price;

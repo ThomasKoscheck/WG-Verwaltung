@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
 public class RequestDetails {
     public String getProduct() {
@@ -9,8 +9,8 @@ public class RequestDetails {
         return price;
     }
 
-    String product;
-    double price;
+    private String product;
+    private double price;
 
     public RequestDetails(String product, double price) {
         this.product = product;

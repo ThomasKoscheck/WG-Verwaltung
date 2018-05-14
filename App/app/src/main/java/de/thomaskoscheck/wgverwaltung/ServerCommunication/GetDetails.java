@@ -1,4 +1,6 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.ServerCommunication;
+
+import de.thomaskoscheck.wgverwaltung.Setting.Settings;
 
 public class GetDetails {
     private Settings settings;

@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.Setting;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import de.thomaskoscheck.wgverwaltung.R;
 
 public class SettingsActivity extends AppCompatActivity {
     EditText passwordField;

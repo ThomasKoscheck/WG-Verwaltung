@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -13,7 +13,13 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.Socket;
 
-class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
+import de.thomaskoscheck.wgverwaltung.Cryptographics;
+import de.thomaskoscheck.wgverwaltung.JsonHandler;
+import de.thomaskoscheck.wgverwaltung.Listener.DataProcessedListener;
+import de.thomaskoscheck.wgverwaltung.Setting.Settings;
+import de.thomaskoscheck.wgverwaltung.StringHelper;
+
+public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
     private DataProcessedListener dataProcessedListener;
     private final String TOWRITE = "getServerData";
     private Settings settings;

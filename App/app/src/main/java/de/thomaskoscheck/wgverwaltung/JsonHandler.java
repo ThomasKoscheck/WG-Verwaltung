@@ -2,9 +2,13 @@ package de.thomaskoscheck.wgverwaltung;
 
 import org.json.*;
 
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.Expense;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
+
 public class JsonHandler {
 
-    static ServerResponse parseJson(String json) throws JSONException {
+    public static ServerResponse parseJson(String json) throws JSONException {
         JSONObject response = new JSONObject(json);
         String credit = response.getString("credit");
         String newestAppVersion = response.getString("newestAppVersion");
@@ -21,14 +25,13 @@ public class JsonHandler {
         return new ServerResponse(credit, newestAppVersion, expenses);
     }
 
-    static String generateJsonString(SendDetails sendDetails) {
+    public static String generateJsonString(SendDetails sendDetails) {
         JSONObject jsonRequest = new JSONObject();
         try {
             jsonRequest.put("requester", sendDetails.getSettings().getRequester());
             jsonRequest.put("price", sendDetails.getRequestDetails().getPrice());
             jsonRequest.put("product", sendDetails.getRequestDetails().getProduct());
-            String jsonString =jsonRequest.toString();
-            return jsonString;
+            return jsonRequest.toString();
         } catch (JSONException e) {
             e.printStackTrace();
             return "";

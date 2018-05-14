@@ -21,4 +21,5 @@
     <string name="oldAppVersion">Es gibt eine neue Version bitte installiere sie</string>
     <string name="oldAppVersionTitle">Update verfügbar</string>
     <string name="refreshing">Aktualisiere</string>
+    <string name="port">Bitte gib die Port Nummer ein</string>
 </resources>

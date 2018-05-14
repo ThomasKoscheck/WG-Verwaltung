@@ -1,6 +1,6 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.Setting;
 
-class Settings {
+public class Settings {
     private String password;
     private String requester;
     private String server;

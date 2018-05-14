@@ -17,6 +17,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.thomaskoscheck.wgverwaltung.Listener.AlertDialogAnswerSelectedListener;
+import de.thomaskoscheck.wgverwaltung.Listener.DataProcessedListener;
+import de.thomaskoscheck.wgverwaltung.Listener.DataSentListener;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetDetails;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetServerData;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.RequestDetails;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendRequestDetails;
+import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
+import de.thomaskoscheck.wgverwaltung.Setting.Settings;
+import de.thomaskoscheck.wgverwaltung.Setting.SettingsActivity;
+import de.thomaskoscheck.wgverwaltung.Setting.SettingsStore;
+
 public class MainActivity extends AppCompatActivity {
     private EditText product;
     private EditText price;
@@ -78,25 +91,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void send(View view) {
-        final String productString = product.getText().toString();
+        final String descriptionString = product.getText().toString();
         final String priceString = price.getText().toString();
-        if (priceString.equals("") && productString.equals("")) {
+        if (priceString.equals("") && descriptionString.equals("")) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceAndProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
         } else if (priceString.equals("")) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
-        } else if (productString.equals("")) {
+        } else if (descriptionString.equals("")) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
         } else {
-            buildAlertDialog(R.string.SendConfirmation, R.string.SendConfirmationText, android.R.string.yes, android.R.string.no, android.R.drawable.ic_input_add);
-            if(alertDialogResult){
-                sendRequest(productString, Double.parseDouble(priceString));
-            }
+            buildAlertDialog(R.string.SendConfirmation, R.string.SendConfirmationText, android.R.string.yes, android.R.string.no, android.R.drawable.ic_input_add, new AlertDialogAnswerSelectedListener() {
+                @Override
+                public void onAnswerSelected(boolean answer) {
+                    if(answer){
+                        sendRequest(descriptionString, Double.parseDouble(priceString));
+                        fetchDataFromServer();
+                    }
+                }
+            });
         }
-        clearInput();
-        fetchDataFromServer();
     }
 
     public void refreshLeftCredit(View view) {
@@ -105,33 +121,36 @@ public class MainActivity extends AppCompatActivity {
         fetchDataFromServer();
     }
 
-    private void buildAlertDialog(int titleId, int messageId, int positiveButtonId, int negativeButtonId, int iconId){
+    private void buildAlertDialog(int titleId, int messageId, int positiveButtonId, int negativeButtonId, int iconId, final AlertDialogAnswerSelectedListener alertDialogAnswerSelectedListener){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         builder.setTitle(titleId);
         builder.setMessage(messageId);
 
         builder.setPositiveButton(positiveButtonId, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                setAlertDialogResult(true);
+                alertDialogAnswerSelectedListener.onAnswerSelected(true);
             }
         });
 
         builder.setNegativeButton(negativeButtonId, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                setAlertDialogResult(false);
+                alertDialogAnswerSelectedListener.onAnswerSelected(false);
             }
         });
         builder.setIcon(iconId);
         builder.show();
     }
 
-    private void setAlertDialogResult(boolean result){
-        alertDialogResult=result;
-    }
-
     private void sendRequest(String description, double price) {
         RequestDetails requestDetails = new RequestDetails(description, price);
         SendRequestDetails sendRequestDetails = new SendRequestDetails();
+        sendRequestDetails.setDataSentListener(new DataSentListener() {
+            @Override
+            public void onDataSent(boolean succeeded) {
+                fetchDataFromServer();
+                clearInput();
+            }
+        });
         sendRequestDetails.execute(new SendDetails(settings, requestDetails));
     }
     private void fetchDataFromServer(){
@@ -146,7 +165,12 @@ public class MainActivity extends AppCompatActivity {
                         pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                         String version = pInfo.versionName;
                         if(!serverResponse.getNewestAppVersion().equals(version)){
-                            buildAlertDialog(R.string.oldAppVersionTitle, R.string.oldAppVersion, android.R.string.ok, android.R.string.no, android.R.drawable.stat_sys_warning);
+                            buildAlertDialog(R.string.oldAppVersionTitle, R.string.oldAppVersion, android.R.string.ok, android.R.string.no, android.R.drawable.stat_sys_warning, new AlertDialogAnswerSelectedListener() {
+                                @Override
+                                public void onAnswerSelected(boolean answer) {
+                                    //TODO: Download and install new apk
+                                }
+                            });
                         }
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();

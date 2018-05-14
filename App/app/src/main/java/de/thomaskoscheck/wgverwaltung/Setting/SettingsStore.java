@@ -1,7 +1,9 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.Setting;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import de.thomaskoscheck.wgverwaltung.R;
 
 public class SettingsStore {
 

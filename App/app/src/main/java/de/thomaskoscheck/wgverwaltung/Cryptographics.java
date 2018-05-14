@@ -14,7 +14,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Cryptographics {
-    static String encryptString(String rawString, byte[] key, String initVector) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException {
+    public static String encryptString(String rawString, byte[] key, String initVector) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException {
         IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
         SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
 
@@ -35,7 +35,7 @@ public class Cryptographics {
     }
 
 
-    static byte[] generateHexPassphrase(String passphrase) {
+    public static byte[] generateHexPassphrase(String passphrase) {
         StringBuilder stringBuilder = new StringBuilder(passphrase);
         int passphraseLength = passphrase.length();
         if (passphraseLength < 16) {
@@ -57,7 +57,7 @@ public class Cryptographics {
         return stringBuilder.toString().getBytes();
     }
 
-    static String decryptString(String encryptedString, byte[] key, String initVector) {
+    public static String decryptString(String encryptedString, byte[] key, String initVector) {
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
             SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");

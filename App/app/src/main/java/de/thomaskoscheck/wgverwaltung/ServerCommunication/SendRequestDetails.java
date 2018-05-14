@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung;
+package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,9 +10,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.Socket;
-import java.util.Set;
+
+import de.thomaskoscheck.wgverwaltung.Cryptographics;
+import de.thomaskoscheck.wgverwaltung.JsonHandler;
+import de.thomaskoscheck.wgverwaltung.Listener.DataSentListener;
+import de.thomaskoscheck.wgverwaltung.Setting.Settings;
+import de.thomaskoscheck.wgverwaltung.StringHelper;
 
 public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
+    private DataSentListener dataSentListener;
     private Settings settings;
     private Socket socket;
     private InputStream inputStream;
@@ -81,5 +87,7 @@ public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
         super.onPostExecute(succeeded);
     }
 
-
+    public void setDataSentListener(DataSentListener dataSentListener) {
+        this.dataSentListener = dataSentListener;
+    }
 }
