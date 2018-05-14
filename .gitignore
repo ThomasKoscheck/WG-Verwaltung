@@ -8,3 +8,9 @@ App/\.idea/misc\.xml
 App/\.idea/runConfigurations\.xml
 
 *.pyc
+
+*.jks
+
+App/app/release/output\.json
+
+App/app/release/app-release\.apk
