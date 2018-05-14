@@ -39,7 +39,6 @@ public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
             passphraseHex = Cryptographics.generateHexPassphrase(settings.getPassword());
             initVector = getInitVector();
 
-
             String encrypted = Cryptographics.encryptString(TOWRITE, passphraseHex, initVector);
             writeEncryptedData(encrypted);
 

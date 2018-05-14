@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText price;
     private Settings settings;
     private TextView leftCredit;
-    private Context context;
-    private boolean alertDialogResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         leftCredit = findViewById(R.id.leftCredit);
         settings = SettingsStore.load(this);
-        context = this;
     }
 
     @Override
@@ -106,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             buildAlertDialog(R.string.SendConfirmation, R.string.SendConfirmationText, android.R.string.yes, android.R.string.no, android.R.drawable.ic_input_add, new AlertDialogAnswerSelectedListener() {
                 @Override
                 public void onAnswerSelected(boolean answer) {
-                    if(answer){
+                    if (answer) {
                         sendRequest(descriptionString, Double.parseDouble(priceString));
                         fetchDataFromServer();
                     }
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         fetchDataFromServer();
     }
 
-    private void buildAlertDialog(int titleId, int messageId, int positiveButtonId, int negativeButtonId, int iconId, final AlertDialogAnswerSelectedListener alertDialogAnswerSelectedListener){
+    private void buildAlertDialog(int titleId, int messageId, int positiveButtonId, int negativeButtonId, int iconId, final AlertDialogAnswerSelectedListener alertDialogAnswerSelectedListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         builder.setTitle(titleId);
         builder.setMessage(messageId);
@@ -153,24 +150,26 @@ public class MainActivity extends AppCompatActivity {
         });
         sendRequestDetails.execute(new SendDetails(settings, requestDetails));
     }
-    private void fetchDataFromServer(){
+
+    private void fetchDataFromServer() {
         GetServerData getServerData = new GetServerData();
         getServerData.setDataProcessedListener(new DataProcessedListener() {
             @Override
             public void onDataLoaded(ServerResponse serverResponse) {
-                if(serverResponse != null) {
+                if (serverResponse != null) {
                     leftCredit.setText(serverResponse.getCredit());
                     try {
                         PackageInfo pInfo;
                         pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                         String version = pInfo.versionName;
-                        if(!serverResponse.getNewestAppVersion().equals(version)){
-                            buildAlertDialog(R.string.oldAppVersionTitle, R.string.oldAppVersion, android.R.string.ok, android.R.string.no, android.R.drawable.stat_sys_warning, new AlertDialogAnswerSelectedListener() {
-                                @Override
-                                public void onAnswerSelected(boolean answer) {
-                                    //TODO: Download and install new apk
-                                }
-                            });
+                        if (!serverResponse.getNewestAppVersion().equals(version)) {
+                            buildAlertDialog(R.string.oldAppVersionTitle, R.string.oldAppVersion, android.R.string.ok,
+                                    android.R.string.no, android.R.drawable.stat_sys_warning, new AlertDialogAnswerSelectedListener() {
+                                        @Override
+                                        public void onAnswerSelected(boolean answer) {
+
+                                        }
+                                    });
                         }
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
