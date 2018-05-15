@@ -157,22 +157,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataLoaded(ServerResponse serverResponse) {
                 if (serverResponse != null) {
                     leftCredit.setText(serverResponse.getCredit());
-                    try {
-                        PackageInfo pInfo;
-                        pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                        String version = pInfo.versionName;
-                        if (!serverResponse.getNewestAppVersion().equals(version)) {
-                            buildAlertDialog(R.string.oldAppVersionTitle, R.string.oldAppVersion, android.R.string.ok,
-                                    android.R.string.no, android.R.drawable.stat_sys_warning, new AlertDialogAnswerSelectedListener() {
-                                        @Override
-                                        public void onAnswerSelected(boolean answer) {
-
-                                        }
-                                    });
-                        }
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         });
