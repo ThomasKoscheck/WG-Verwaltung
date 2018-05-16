@@ -72,5 +72,6 @@ public class SettingsActivity extends AppCompatActivity {
         settings.setPort(port);
         Toast settingsSaved = Toast.makeText(this, R.string.settingsSaved, Toast.LENGTH_LONG);
         settingsSaved.show();
+        finish();
     }
 }
