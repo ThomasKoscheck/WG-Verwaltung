@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         product = findViewById(R.id.product);
         price = findViewById(R.id.price);
         leftCredit = findViewById(R.id.leftCredit);
-        settings = SettingsStore.load(this);
     }
 
     @Override
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
+        settings = SettingsStore.load(this);
         fetchDataFromServer();
     }
 
