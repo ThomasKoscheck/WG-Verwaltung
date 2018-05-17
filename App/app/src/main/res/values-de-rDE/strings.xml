@@ -22,4 +22,5 @@
     <string name="refreshing">Aktualisiere</string>
     <string name="port">Bitte gib die Port Nummer ein</string>
     <string name="title_activity_settings_activity">Einstellungen</string>
+    <string name="errorOnServerAction">Ein Fehler beim Verarbeiten der Daten ist aufgetreten. Bitte überprüfen die Daten und das Passwort.</string>
 </resources>
