@@ -66,9 +66,11 @@ def listen():
                     product, requester, price, dates, done = jsonHandler.parseJSON(data) # getting parsed data from json send from app
                     credit = sqlHandler.getCreditSQL() # get the actual credit
                     credit -= price # new credit
-                    sqlHandler.insertIntoSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database
-                    sendMail.send(credit, product, requester, price, dates, done) # send Email about entry
+                    resultState = sqlHandler.insertIntoSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database              
+                    if resultState == 1:   # send Email about entry only in case of success 
+                        sendMail.send(credit, product, requester, price, dates, done) 
 
+                    current_connection.send(resultState)
                     current_connection.shutdown(1)
                     current_connection.close()
                     print(bcolors.color.WARNING + "--- Closed connection ---\n" + bcolors.color.ENDC)
