@@ -27,4 +27,5 @@
     <string name="oldAppVersion">There is a new version available, please install it</string>
     <string name="refreshing">Refreshing</string>
     <string name="port">Please specify the port number</string>
+    <string name="title_activity_admin_panel">AdminPanel</string>
 </resources>
