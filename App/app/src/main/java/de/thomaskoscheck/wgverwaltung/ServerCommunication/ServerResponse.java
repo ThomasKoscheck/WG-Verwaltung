@@ -1,5 +1,6 @@
 package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
+
 public class ServerResponse {
     private String credit;
     private String newestAppVersion;
@@ -18,4 +19,9 @@ public class ServerResponse {
     public String getNewestAppVersion() {
         return newestAppVersion;
     }
+
+    public Expense[] getExpenses() {
+        return expenses;
+    }
+
 }

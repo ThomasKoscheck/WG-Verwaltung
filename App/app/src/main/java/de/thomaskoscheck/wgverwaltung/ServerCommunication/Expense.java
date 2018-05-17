@@ -23,4 +23,10 @@ public class Expense {
         return price;
     }
 
+    @Override
+    public String toString() {
+        return "requester='" + requester + '\'' +
+                ", product='" + product + '\'' +
+                ", price=" + price;
+    }
 }

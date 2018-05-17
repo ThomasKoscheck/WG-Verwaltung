@@ -19,12 +19,17 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Setting.SettingsActivity"
             android:label="@string/title_activity_settings_activity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AdminPanel"
+            android:label="@string/title_activity_admin_panel"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
