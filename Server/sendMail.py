@@ -5,11 +5,12 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import bcolors 
+import credentials
  
-def send(credit, product, requester, price, dates, done): 
+def sendOnNewEntry(credit, product, requester, price, dates, done): 
     try:
-        fromaddr = "mailer@domain.com"
-        toaddr = 'recipient@domain.com, recipient2@domain.com'
+        fromaddr = credentials.getFROMADDR();
+        toaddr = credentials.getTOADDR()
         msg = MIMEMultipart()
         msg['From'] = fromaddr
         msg['To'] = toaddr
@@ -23,15 +24,42 @@ def send(credit, product, requester, price, dates, done):
 
         msg.attach(MIMEText(body, 'plain'))
     
-        server = smtplib.SMTP('smtp.domain.com', 587)
+        server = smtplib.SMTP(credentials.getSMTP(), credentials.getSMTPPORT())
         server.starttls()
-        server.login(fromaddr, "mailpassword")
+        server.login(fromaddr, credentials.getSMTPPORT())
         text = msg.as_string()
         server.sendmail(fromaddr, toaddr.split(','), text)
         server.quit()
 
-        print(bcolors.color.OKGREEN + "--- Sent mail succesfully --- " + bcolors.color.ENDC + "\n")
+        # print(bcolors.color.OKGREEN + "--- Sent mail succesfully --- " + bcolors.color.ENDC + "\n")
 
     except Exception as e:
         print(bcolors.color.FAIL + str(e) + bcolors.color.ENDC)
         print(bcolors.color.FAIL + "Error sending mail" + bcolors.color.ENDC)
+
+
+def sendError(title, text): 
+    try:
+        fromaddr = credentials.getFROMADDR();
+        toaddr = credentials.getTOADDR()
+        msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = toaddr
+        msg['Subject'] = title
+        body= text 
+
+        msg.attach(MIMEText(body, 'plain'))
+    
+        server = smtplib.SMTP(credentials.getSMTP(), credentials.getSMTPPORT())
+        server.starttls()
+        server.login(fromaddr, credentials.getSMTPPORT())
+        text = msg.as_string()
+        server.sendmail(fromaddr, toaddr.split(','), text)
+        server.quit()
+
+        # print(bcolors.color.OKGREEN + "--- Sent mail succesfully --- " + bcolors.color.ENDC + "\n")
+
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e) + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error sending mail" + bcolors.color.ENDC)
+
