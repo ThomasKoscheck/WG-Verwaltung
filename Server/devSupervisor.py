@@ -5,30 +5,34 @@ import os
 import subprocess
 import sendMail
 from datetime import date
+import fileinput
 
-FILE = "pid.txt"
+
+PIDFILE = "pid.txt"
 
 # get newest code
 cloneRepo()
 
 # read pid in file 
-oldPid = readFile(FILE)
+oldPid = readFile(PIDFILE)
 
 # kill running server
 killStatement = 'kill '.join(oldPid)
 os.system(killStatement)
 
 # exchange path to config.ini in credentials.py
-data = readFile("development/credentials.py")
+filedata = readFile("development/credentials.py")
 
-# TO-DO manipulate file and exchange path
-
+# Tmanipulate file and exchange path
+# Replace the target string
+filedata = filedata.replace('/path-to-config-ini-file', '/my-own-new-path-to-config-file')
+writeFile("development/credentials.py", filedata)
 
 # try to start new server
 newPid = startServer()
 
 # write pid in file for later use
-writeFile(FILE, newPid)
+writeFile(PIDFILE, newPid)
 
 def readFile(file):
     file = open(file, "w") 
@@ -40,6 +44,8 @@ def writeFile(file, content):
     file = open(file, "r")
     file.write(content)
     file.close()
+
+
 
 def startServer():
     try:
