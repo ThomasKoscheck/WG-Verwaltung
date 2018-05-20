@@ -16,7 +16,7 @@ import sendMail
 AES_BLOCK_SIZE = 16
 
 # pass port as argument
-if sys.argv[0] is None or sys.argv[0].isdigit() is False:
+if sys.argv[0] is None or int(sys.argv[0]).isdigit() is False:
     print(bcolors.color.FAIL + "--- You have to pass a port as argument (python server.py 9999) ---\n" + bcolors.color.ENDC + "\n")
     sys.exit() 
 
