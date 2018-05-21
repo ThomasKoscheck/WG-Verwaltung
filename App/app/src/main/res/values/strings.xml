@@ -6,7 +6,7 @@
     <string name="passwordKey" translatable="false">passwordKey</string>
     <string name="requesterKey" translatable="false">requesterKey</string>
     <string name="password">Ask the server admin for the password</string>
-    <string name="requester">Your name here</string>
+    <string name="requesterHint">Your name here</string>
     <string name="save">Save</string>
     <string name="expenseDescription">Description of the expense</string>
     <string name="price">Price</string>
@@ -28,4 +28,5 @@
     <string name="refreshing">Refreshing</string>
     <string name="port">Please specify the port number</string>
     <string name="title_activity_admin_panel">AdminPanel</string>
+    <string name="requester">Buyer</string>
 </resources>
