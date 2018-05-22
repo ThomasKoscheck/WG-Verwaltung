@@ -26,7 +26,7 @@ def sendOnNewEntry(credit, product, requester, price, dates, done):
     
         server = smtplib.SMTP(credentials.getSMTP(), credentials.getSMTPPORT())
         server.starttls()
-        server.login(fromaddr, credentials.getSMTPPORT())
+        server.login(fromaddr, credentials.getMAILPASSWORD())
         text = msg.as_string()
         server.sendmail(fromaddr, toaddr.split(','), text)
         server.quit()
@@ -50,9 +50,9 @@ def sendError(title, text):
 
         msg.attach(MIMEText(body, 'plain'))
     
-        server = smtplib.SMTP(credentials.getSMTP(), credentials.getSMTPPORT())
+        server = smtplib.SMTP(credentials.getSMTP(), int(credentials.getSMTPPORT()))
         server.starttls()
-        server.login(fromaddr, credentials.getSMTPPORT())
+        server.login(fromaddr, credentials.getMAILPASSWORD())
         text = msg.as_string()
         server.sendmail(fromaddr, toaddr.split(','), text)
         server.quit()
