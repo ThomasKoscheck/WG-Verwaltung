@@ -16,7 +16,7 @@ import sendMail
 AES_BLOCK_SIZE = 16
 
 # pass port as argument
-if sys.argv[0] is None or int(sys.argv[0]).isdigit() is False:
+if sys.argv[1] is None or sys.argv[1].isdigit() is False:
     print(bcolors.color.FAIL + "--- You have to pass a port as argument (python server.py 9999) ---\n" + bcolors.color.ENDC + "\n")
     sys.exit() 
 
@@ -25,7 +25,7 @@ if sys.argv[0] is None or int(sys.argv[0]).isdigit() is False:
 def listen():
     connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    connection.bind(('0.0.0.0', sys.argv[0]))
+    connection.bind(('0.0.0.0', sys.argv[1]))
     connection.listen(10)
     while True:
         current_connection, address = connection.accept()
