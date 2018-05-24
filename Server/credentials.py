@@ -60,6 +60,18 @@ def getDBTABLE():
         print(bcolors.color.FAIL + "Error reading dbtable from config file" + bcolors.color.ENDC)   
         return -1
 
+
+def getDBTABLEDEV():
+    try:
+        handler = configHandler()
+        dbtable = handler.get('project-wg-verwaltung','wg_dbtable_dev')
+        return dbtable
+        
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error reading dev dbtable from config file" + bcolors.color.ENDC)   
+        return -1
+
 def getAPPVERSION():
     try:
         handler = configHandler()
