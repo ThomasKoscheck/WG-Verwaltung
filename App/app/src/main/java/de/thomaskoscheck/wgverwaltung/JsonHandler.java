@@ -5,7 +5,6 @@ import org.json.*;
 import de.thomaskoscheck.wgverwaltung.ServerCommunication.Expense;
 import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
 import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
-import de.thomaskoscheck.wgverwaltung.Setting.SettingsActivity;
 
 public class JsonHandler {
 

@@ -34,6 +34,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
         cursor.execute(sql, (credit, product, requester, price, dates, done))
         # Commit your changes in the database
         db.commit()
+        return 1
 
         print(bcolors.color.OKGREEN + "--- Inserted new entry in database ---\n" + bcolors.color.ENDC)
 
@@ -41,6 +42,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
         print(bcolors.color.FAIL+ str(e) +bcolors.color.ENDC)
         # Rollback in case there is any error
         db.rollback()
+        return 0
 
     # disconnect from server
     db.close()

@@ -1,7 +1,6 @@
 package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONException;
 
@@ -44,7 +43,6 @@ public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
 
             String serverResponseDecrypted = getDecryptedServerData();
 
-            Log.d("TK", "decryptedServerData: " + serverResponseDecrypted);
             inputStream.close();
             outputStream.close();
             socket.close();
@@ -66,14 +64,12 @@ public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
         outputStreamWriter.write(filledWithZeroes);
         outputStreamWriter.flush();
 
-        Log.d("TK", "encrypted: " + data);
         outputStreamWriter.write(data);
         outputStreamWriter.flush();
     }
 
     private String getDecryptedServerData() throws IOException {
         String serverResponseEncrypted = readStream(100000);
-        Log.d("TK", "encryptedServerData: " + serverResponseEncrypted);
         return Cryptographics.decryptString(serverResponseEncrypted, passphraseHex, initVector);
     }
 
