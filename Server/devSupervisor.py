@@ -74,7 +74,7 @@ def manipulateFiles():
     try:
         # exchange path to config.ini in credentials.py
         filedata_credentials = readFile(PATH + '/development/credentials.py')
-        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/var/www/thomaskoscheck.de/credentials/config.ini')
+        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/path-to-your-config-file')
         writeFile(PATH +"/development/credentials.py", filedata_credentials)
 
         # exchange database calling no.1
