@@ -77,6 +77,12 @@ public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
         if (serverResponseDecrypted == null)
             throw new NullPointerException();
 
+        else if(serverResponseDecrypted == "-1") {
+            Expense[] expenses = new Expense[0];
+            return new ServerResponse("","", expenses);
+        }
+
+
         return JsonHandler.parseJson(serverResponseDecrypted);
     }
 

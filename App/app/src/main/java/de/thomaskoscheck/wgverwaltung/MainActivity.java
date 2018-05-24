@@ -154,6 +154,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataLoaded(ServerResponse serverResponse) {
                 if (serverResponse != null) {
                     leftCredit.setText(serverResponse.getCredit());
+                    if(serverResponse.getCredit().equals("")){
+                        Toast somethingWentWrong = Toast.makeText(getApplicationContext(), R.string.errorOnServerAction, Toast.LENGTH_LONG);
+                        somethingWentWrong.show();
+                    }
                 }
             }
         });
