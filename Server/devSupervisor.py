@@ -60,8 +60,9 @@ def killOldServer():
 def cloneRepo():
     try:
         # clone current branch
-        os.system('git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git + PATH + '/')
-
+        git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/'
+        os.system(git_command)
+        
         # move and cleanup code
         os.system('mkdir -p ' + PATH + '/development')
         os.system('mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/')
@@ -105,7 +106,3 @@ newPid = startServer()
 
 # write pid in file for later use
 writeFile(PIDFILE, newPid)
-
-
-    
-
