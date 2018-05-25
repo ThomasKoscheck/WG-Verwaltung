@@ -28,15 +28,17 @@ def encrypt(message, passphrase, IV):
     passphrase = padPassphrase(passphrase)
     print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
-    print(bcolors.color.HEADER + "--- Encrypted the data succesfully ---\n" + bcolors.color.ENDC)
     encrypted = b64encode(aes.encrypt(message))
+    print(bcolors.color.HEADER + "--- Encrypted the data succesfully ---\n" + bcolors.color.ENDC)
     return encrypted
 
 def decrypt(encrypted, passphrase, IV):
-    print("Key: " + passphrase)
-    print(bcolors.color.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.color.ENDC)
+    print("Key: " + passphrase)  
+    passphrase = padPassphrase(passphrase)
+    aes = AES.new(passphrase, AES.MODE_CBC, IV)
     decrypted = aes.decrypt(b64decode(encrypted))
     decrypted = removePadding(decrypted)
+    print(bcolors.color.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.color.ENDC)
     return decrypted
 
 def padPassphrase(passphrase):
