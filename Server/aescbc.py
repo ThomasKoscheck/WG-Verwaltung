@@ -12,6 +12,11 @@ def generatePadding(data):
         data += "?"  
     return data
 
+def removePadding(data):
+    while data.endswith('?'):
+        data = data[:-1]
+    return data
+
 def generateIV(length):
     # generate IV for AES encryption
     random_bytes = urandom(length)
@@ -31,6 +36,7 @@ def decrypt(encrypted, passphrase, IV):
     print("Key: " + passphrase)
     print(bcolors.color.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.color.ENDC)
     decrypted = aes.decrypt(b64decode(encrypted))
+    decrypted = removePadding(decrypted)
     return decrypted
 
 def padPassphrase(passphrase):
