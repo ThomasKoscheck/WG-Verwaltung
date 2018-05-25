@@ -83,4 +83,3 @@ def getCreditSQL():
     db.close()
 
     return credit
-
