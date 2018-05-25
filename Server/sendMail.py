@@ -61,4 +61,4 @@ def sendError(title, text):
 
     except Exception as e:
         print(bcolors.color.FAIL + str(e) + bcolors.color.ENDC)
-        print(bcolors.color.FAIL + "Error sending mail" + bcolors.color.ENDC
+        print(bcolors.color.FAIL + "Error sending mail" + bcolors.color.ENDC)

@@ -7,7 +7,7 @@ import sendMail
 from datetime import date
 import fileinput
 
-PATH = "/var/www/thomaskoscheck.de/public_html/projekte/wg-verwaltung/server"
+PATH = '/var/www/thomaskoscheck.de/public_html/projekte/wg-verwaltung/server'
 PIDFILE = PATH + "/pid.txt"
 
 def readFile(file):
@@ -60,12 +60,14 @@ def killOldServer():
 def cloneRepo():
     try:
         # clone current branch
-        os.system('git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git')
+       	git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
 
+	os.system(git_command)
         # move and cleanup code
-        os.system('mkdir -p ' + PATH + '/development')
-        os.system('mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/')
-        os.system('rm -rf ' + PATH + '/WG-Verwaltung')
+        os.system('mkdir -p ' + PATH + '/development/')
+	mv_command = 'mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/'
+	os.system(mv_command)
+        os.system('rm -rf ' + PATH + '/WG-Verwaltung/')
 
     except Exception as e:
         print(e)
@@ -74,7 +76,7 @@ def manipulateFiles():
     try:
         # exchange path to config.ini in credentials.py
         filedata_credentials = readFile(PATH + '/development/credentials.py')
-        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/path-to-your-config-file')
+        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/var/www/thomaskoscheck.de/credentials/config.ini')
         writeFile(PATH +"/development/credentials.py", filedata_credentials)
 
         # exchange database calling no.1

@@ -55,7 +55,7 @@ def buildJSON():
         for row in results:
             jsonstring += '{ "requester":"' + str(row[0]) + '",' + \
                     '"product":"' + str(row[1]) + '",' + \
-                    '"price":"' + str(row[2]) + ' €",' +\
+                    '"price":"' + str(row[2]) + '",' +\
                     '"date":"' + str(row[3]) + '"' + \
                     "},"
 
