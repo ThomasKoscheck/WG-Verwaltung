@@ -60,7 +60,7 @@ def killOldServer():
 def cloneRepo():
     try:
         # clone current branch
-        os.system('git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git')
+        os.system('git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git + PATH + '/')
 
         # move and cleanup code
         os.system('mkdir -p ' + PATH + '/development')
