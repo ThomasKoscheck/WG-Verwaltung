@@ -40,7 +40,7 @@ def listen():
                 print(bcolors.color.OKBLUE + "--- Encryted string ---\n" + bcolors.color.ENDC  + data + "\n")                
                 
                 # decrypting the data
-                auth = credentials.getAUTH()
+                auth = "test"
                 data = aescbc.decrypt(data, auth, IV)
 
                 print(bcolors.color.OKBLUE + "--- Got this data ---\n" + bcolors.color.ENDC  + data + "\n")

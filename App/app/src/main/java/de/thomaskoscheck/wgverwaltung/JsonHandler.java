@@ -1,11 +1,12 @@
 package de.thomaskoscheck.wgverwaltung;
 
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import de.thomaskoscheck.wgverwaltung.ServerCommunication.Expense;
 import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
 import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
-import de.thomaskoscheck.wgverwaltung.Setting.SettingsActivity;
 
 public class JsonHandler {
 
@@ -16,7 +17,7 @@ public class JsonHandler {
     private static final String PRODUCT ="product";
     private static final String PRICE ="price";
 
-    public static ServerResponse parseJson(String json) throws JSONException {
+    public static ServerResponse parseServerResponse(String json) throws JSONException {
         JSONObject response = new JSONObject(json);
         String credit = response.getString(CREDIT);
         String newestAppVersion = response.getString(NEWESTAPPVERSION);
