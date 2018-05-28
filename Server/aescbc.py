@@ -9,8 +9,12 @@ import bcolors
 
 def generatePadding(data):
     while len(data)%16 != 0:
-        data += "?"
-    
+        data += "?"  
+    return data
+
+def removePadding(data):
+    while data.endswith('?'):
+        data = data[:-1]
     return data
 
 def generateIV(length):
@@ -21,21 +25,20 @@ def generateIV(length):
 
 def encrypt(message, passphrase, IV):
     # passphrase MUST be 16, 24 or 32 bytes long, how can I do that ?  
-    print("Key: " + passphrase)
     passphrase = padPassphrase(passphrase)
     print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
-    print(bcolors.color.HEADER + "--- Encrypted the data succesfully ---\n" + bcolors.color.ENDC)
     encrypted = b64encode(aes.encrypt(message))
+    print(bcolors.color.HEADER + "--- Encrypted the data succesfully ---\n" + bcolors.color.ENDC)
     return encrypted
 
 def decrypt(encrypted, passphrase, IV):
-    print("Key: " + passphrase)
+    print("Key: " + passphrase)  
     passphrase = padPassphrase(passphrase)
-    print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
-    print(bcolors.color.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.color.ENDC)
     decrypted = aes.decrypt(b64decode(encrypted))
+    decrypted = removePadding(decrypted)
+    print(bcolors.color.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.color.ENDC)
     return decrypted
 
 def padPassphrase(passphrase):

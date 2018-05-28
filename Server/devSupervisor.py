@@ -28,10 +28,9 @@ def writeFile(file, content):
         print(e)
 
 def startServer():
-    # write shell script with later gets executes
-    # dirty but efficient
     try:
-        proc = subprocess.Popen(['python', PATH + '/development/server.py', '9998'], close_fds=True)
+	pathToFile = PATH + '/development/server.py'
+        proc = subprocess.Popen(['python', pathToFile, '9998'], close_fds=True)
         pid = proc.pid # access `pid` attribute to get the pid of the child process.
         return pid
 
@@ -49,25 +48,27 @@ def killOldServer():
         file.close() 
 
         # kill running server
-        killStatement = 'kill '.join(oldPid)
+        killStatement = 'kill ' +  str(oldPid)
         os.system(killStatement)
 
     # always breaks on first run, because no old devServer exists
-    except Exception:
+    except Exception as e:
+	print(e)
         pass
 
 
 def cloneRepo():
     try:
+	os.system('rm -rf ' + PATH + '/development/')
+	
         # clone current branch
-
        	git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
         os.system(git_command)
         
         # move and cleanup code
         os.system('mkdir -p ' + PATH + '/development/')
-	      mv_command = 'mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/'
-	      os.system(mv_command)
+	mv_command = 'mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/'
+	os.system(mv_command)
         os.system('rm -rf ' + PATH + '/WG-Verwaltung/')
 
     except Exception as e:
