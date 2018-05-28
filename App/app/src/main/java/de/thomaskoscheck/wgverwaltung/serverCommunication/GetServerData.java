@@ -1,10 +1,10 @@
-package de.thomaskoscheck.wgverwaltung.ServerCommunication;
+package de.thomaskoscheck.wgverwaltung.serverCommunication;
 
 import android.os.AsyncTask;
 
 import de.thomaskoscheck.wgverwaltung.JsonHandler;
-import de.thomaskoscheck.wgverwaltung.Listener.DataProcessedListener;
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
+import de.thomaskoscheck.wgverwaltung.listener.DataProcessedListener;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
 
 public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
     private DataProcessedListener dataProcessedListener;

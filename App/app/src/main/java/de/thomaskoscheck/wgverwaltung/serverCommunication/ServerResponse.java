@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.ServerCommunication;
+package de.thomaskoscheck.wgverwaltung.serverCommunication;
 
 public class ServerResponse {
     private String credit;

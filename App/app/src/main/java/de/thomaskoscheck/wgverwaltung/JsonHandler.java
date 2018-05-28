@@ -4,9 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.Expense;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.Expense;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.SendDetails;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.ServerResponse;
 
 public class JsonHandler {
 

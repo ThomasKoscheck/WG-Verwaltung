@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.ServerCommunication;
+package de.thomaskoscheck.wgverwaltung.serverCommunication;
 
 public class RequestDetails {
     public String getProduct() {

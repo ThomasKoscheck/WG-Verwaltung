@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.ServerCommunication;
+package de.thomaskoscheck.wgverwaltung.serverCommunication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +9,7 @@ import java.io.Reader;
 import java.net.Socket;
 
 import de.thomaskoscheck.wgverwaltung.Cryptographics;
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
 import de.thomaskoscheck.wgverwaltung.StringHelper;
 
 public class ServerConnection {

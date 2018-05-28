@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.Setting;
+package de.thomaskoscheck.wgverwaltung.setting;
 
 import android.content.Context;
 import android.content.SharedPreferences;

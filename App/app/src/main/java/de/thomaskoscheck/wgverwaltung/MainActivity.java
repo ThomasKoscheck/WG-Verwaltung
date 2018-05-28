@@ -13,18 +13,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.thomaskoscheck.wgverwaltung.Listener.AlertDialogAnswerSelectedListener;
-import de.thomaskoscheck.wgverwaltung.Listener.DataProcessedListener;
-import de.thomaskoscheck.wgverwaltung.Listener.DataSentListener;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetServerData;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.RequestDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendRequestDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
-import de.thomaskoscheck.wgverwaltung.Setting.SettingsActivity;
-import de.thomaskoscheck.wgverwaltung.Setting.SettingsStore;
+import de.thomaskoscheck.wgverwaltung.listener.AlertDialogAnswerSelectedListener;
+import de.thomaskoscheck.wgverwaltung.listener.DataProcessedListener;
+import de.thomaskoscheck.wgverwaltung.listener.DataSentListener;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.GetDetails;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.GetServerData;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.RequestDetails;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.SendDetails;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.SendRequestDetails;
+import de.thomaskoscheck.wgverwaltung.serverCommunication.ServerResponse;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
+import de.thomaskoscheck.wgverwaltung.setting.SettingsActivity;
+import de.thomaskoscheck.wgverwaltung.setting.SettingsStore;
 
 public class MainActivity extends AppCompatActivity {
     private EditText product;

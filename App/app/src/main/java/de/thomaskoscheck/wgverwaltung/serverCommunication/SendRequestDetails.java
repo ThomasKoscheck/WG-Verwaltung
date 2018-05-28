@@ -1,10 +1,10 @@
-package de.thomaskoscheck.wgverwaltung.ServerCommunication;
+package de.thomaskoscheck.wgverwaltung.serverCommunication;
 
 import android.os.AsyncTask;
 
 import de.thomaskoscheck.wgverwaltung.JsonHandler;
-import de.thomaskoscheck.wgverwaltung.Listener.DataSentListener;
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
+import de.thomaskoscheck.wgverwaltung.listener.DataSentListener;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
 
 public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
     private DataSentListener dataSentListener;
