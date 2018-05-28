@@ -5,7 +5,6 @@ import os
 import subprocess
 import sendMail
 from datetime import date
-import fileinput
 
 PATH = '/var/www/thomaskoscheck.de/public_html/projekte/wg-verwaltung/server'
 PIDFILE = PATH + "/pid.txt"
