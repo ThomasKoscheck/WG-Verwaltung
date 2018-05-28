@@ -78,4 +78,3 @@ def buildJSON():
 
     # disconnect from server
     db.close()
-    
