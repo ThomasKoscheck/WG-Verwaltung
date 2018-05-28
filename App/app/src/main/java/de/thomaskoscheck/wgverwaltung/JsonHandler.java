@@ -4,9 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.thomaskoscheck.wgverwaltung.serverCommunication.Expense;
-import de.thomaskoscheck.wgverwaltung.serverCommunication.SendDetails;
-import de.thomaskoscheck.wgverwaltung.serverCommunication.ServerResponse;
+import de.thomaskoscheck.wgverwaltung.server_communication.Expense;
+import de.thomaskoscheck.wgverwaltung.server_communication.SendDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.ServerResponse;
 
 public class JsonHandler {
     private static final String CREDIT ="credit";

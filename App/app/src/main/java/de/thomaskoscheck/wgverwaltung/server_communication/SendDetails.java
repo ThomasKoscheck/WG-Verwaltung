@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.serverCommunication;
+package de.thomaskoscheck.wgverwaltung.server_communication;
 
 import de.thomaskoscheck.wgverwaltung.setting.Settings;
 
