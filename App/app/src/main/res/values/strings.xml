@@ -29,4 +29,6 @@
     <string name="port">Please specify the port number</string>
     <string name="title_activity_admin_panel">AdminPanel</string>
     <string name="requester">Buyer</string>
+    <string name="markDoneConfirmation">Mark as paid?</string>
+    <string name="markDoneConfirmationText">Do you really want to mark this entry as paid?</string>
 </resources>

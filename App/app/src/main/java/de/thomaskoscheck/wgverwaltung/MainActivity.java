@@ -3,15 +3,12 @@ package de.thomaskoscheck.wgverwaltung;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -138,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendRequest(String description, double price) {
-        RequestDetails requestDetails = new RequestDetails(description, price);
+        RequestDetails requestDetails = new RequestDetails(description, settings.getRequester(), price);
         SendRequestDetails sendRequestDetails = new SendRequestDetails();
         sendRequestDetails.setDataSentListener(new DataSentListener() {
             @Override
