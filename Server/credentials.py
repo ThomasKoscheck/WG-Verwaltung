@@ -60,6 +60,18 @@ def getDBTABLE():
         print(bcolors.color.FAIL + "Error reading dbtable from config file" + bcolors.color.ENDC)   
         return -1
 
+
+def getDBTABLEDEV():
+    try:
+        handler = configHandler()
+        dbtable = handler.get('project-wg-verwaltung','wg_dbtable_dev')
+        return dbtable
+        
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error reading dev dbtable from config file" + bcolors.color.ENDC)   
+        return -1
+
 def getAPPVERSION():
     try:
         handler = configHandler()
@@ -91,6 +103,64 @@ def getDBHOST():
     except Exception as e:
         print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
         print(bcolors.color.FAIL + "Error reading dbhost from config file" + bcolors.color.ENDC)   
-        return -1         
+        return -1   
+
+def getFROMADDR():
+    try:
+        handler = configHandler()
+        fromaddr = handler.get('project-wg-verwaltung','from_addr')
+        return fromaddr
+        
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error reading from_addr from config file" + bcolors.color.ENDC)   
+        return -1  
+
+def getTOADDR():
+    try:
+        handler = configHandler()
+        toaddr = handler.get('project-wg-verwaltung','to_addr')
+        return toaddr
+        
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error reading toaddr from config file" + bcolors.color.ENDC)   
+        return -1   
+
+def getSMTP():
+    try:
+        handler = configHandler()
+        smtp = handler.get('project-wg-verwaltung','smtp')
+        return smtp
+        
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error reading smtp from config file" + bcolors.color.ENDC)   
+        return -1  
+
+def getSMTPPORT():
+    try:
+        handler = configHandler()
+        smtp_port = handler.get('project-wg-verwaltung','smtp_port')
+        return smtp_port
+        
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error reading smtpport from config file" + bcolors.color.ENDC)   
+        return -1  
+
+def getMAILPASSWORD():
+    try:
+        handler = configHandler()
+        mail_pw = handler.get('project-wg-verwaltung','mail_pw')
+        return mail_pw
+        
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print(bcolors.color.FAIL + "Error reading mail password from config file" + bcolors.color.ENDC)   
+        return -1  
+ 
+
+          
         
       

@@ -10,5 +10,59 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
     print("Credit: " + credit + " product: " + product + " requester: " + requester + " price: " + str(price))
 
 
+    #   sql = "INSERT INTO %s (credit, product, requester, price, date, done) \
+      # VALUES ('%f', '%s', '%s', '%f', '%s', '%i' )" % \
+       #(dbtable, credit, product, requester, price, dates, done)
+
+    # Prepare SQL query to INSERT a record into the database.
+    sql = 'INSERT INTO %s (credit, product, requester, price, date, done)' % (dbtable)
+    sql = sql + ' VALUES (%s, %s, %s, %s, %s, %s)'
+    
+    try:
+        # Execute the SQL command
+        cursor.execute(sql, (credit, product, requester, price, dates, done))
+        # Commit your changes in the database
+        db.commit()
+        return 1
+
+        print(bcolors.color.OKGREEN + "--- Inserted new entry in database ---\n" + bcolors.color.ENDC)
+
+    except Exception as e:
+        print(bcolors.color.FAIL+ str(e) +bcolors.color.ENDC)
+        # Rollback in case there is any error
+        db.rollback()
+        return 0
+
+    # disconnect from server
+    db.close()
+
 def getCreditSQL():
     return 10
+
+    # Connect to MariaDB  
+    # Open database connection
+    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname)
+
+    # prepare a cursor object using cursor() method
+    cursor = db.cursor()
+
+    sql = "SELECT credit FROM %s \
+        ORDER BY id DESC LIMIT 1" % (dbtable)
+
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Fetch all the rows in a list of lists.
+        results = cursor.fetchall()
+        for row in results:
+            credit = row[0]
+
+
+    except Exception as e:
+        print(bcolors.color.FAIL + str(e)  + bcolors.color.ENDC)
+        print("bcolors.color.FAIL + Error: unable to fetch current credit "+ bcolors.color.ENDC)
+
+    # disconnect from server
+    db.close()
+
+    return credit

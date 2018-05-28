@@ -28,11 +28,12 @@ def buildJSON():
         jsonstring = ""
         json = ""
 
-        jsonstring += '{ "requester":"TestL",' + \
-                '"product":"Salz",' + \
-                '"price":"0.5",' +\
-                '"date":"25.03.1998"' + \
-                "},"
+        for row in results:
+            jsonstring += '{ "requester":"' + str(row[0]) + '",' + \
+                    '"product":"' + str(row[1]) + '",' + \
+                    '"price":"' + str(row[2]) + '",' +\
+                    '"date":"' + str(row[3]) + '"' + \
+                    "},"
 
         jsonstring = jsonstring[:-1]
 
@@ -50,3 +51,6 @@ def buildJSON():
     except Exception as e:
         print(bcolors.color.FAIL+ str(e) +bcolors.color.ENDC)
         print(bcolors.color.FAIL + "Error: unable to fetch data or build json" + bcolors.color.ENDC)
+
+    # disconnect from server
+    db.close()
