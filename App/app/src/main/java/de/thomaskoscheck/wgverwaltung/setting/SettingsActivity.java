@@ -13,11 +13,11 @@ import android.widget.Toast;
 import de.thomaskoscheck.wgverwaltung.R;
 
 public class SettingsActivity extends AppCompatActivity {
-    EditText passwordField;
-    EditText requesterField;
-    EditText serverField;
-    EditText portField;
-    Settings settings;
+    private EditText passwordField;
+    private EditText requesterField;
+    private EditText serverField;
+    private EditText portField;
+    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

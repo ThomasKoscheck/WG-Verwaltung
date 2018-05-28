@@ -2,20 +2,14 @@ package de.thomaskoscheck.wgverwaltung.serverCommunication;
 
 public class ServerResponse {
     private String credit;
-    private String newestAppVersion;
     private Expense[] expenses;
 
-    public ServerResponse(String credit, String newestAppVersion, Expense[] expenses) {
+    public ServerResponse(String credit, Expense[] expenses) {
         this.credit = credit;
-        this.newestAppVersion = newestAppVersion;
         this.expenses = expenses;
     }
 
     public String getCredit() {
         return credit;
-    }
-
-    public String getNewestAppVersion() {
-        return newestAppVersion;
     }
 }

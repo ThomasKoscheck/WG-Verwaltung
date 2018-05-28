@@ -9,18 +9,15 @@ import de.thomaskoscheck.wgverwaltung.serverCommunication.SendDetails;
 import de.thomaskoscheck.wgverwaltung.serverCommunication.ServerResponse;
 
 public class JsonHandler {
-
     private static final String CREDIT ="credit";
     private static final String EXPENSES ="expenses";
     private static final String REQUESTER ="requester";
-    private static final String NEWESTAPPVERSION ="newestAppVersion";
     private static final String PRODUCT ="product";
     private static final String PRICE ="price";
 
     public static ServerResponse parseServerResponse(String json) throws JSONException {
         JSONObject response = new JSONObject(json);
         String credit = response.getString(CREDIT);
-        String newestAppVersion = response.getString(NEWESTAPPVERSION);
         JSONArray expensesJson = response.getJSONArray(EXPENSES);
         Expense[] expenses = new Expense[expensesJson.length()];
 
@@ -31,7 +28,7 @@ public class JsonHandler {
             double price = Double.parseDouble(priceString);
             expenses[i] = new Expense(requester, product, price);
         }
-        return new ServerResponse(credit, newestAppVersion, expenses);
+        return new ServerResponse(credit, expenses);
     }
 
     public static String generateJsonString(SendDetails sendDetails) {
