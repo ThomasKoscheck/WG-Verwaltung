@@ -9,7 +9,7 @@ import credentials
  
 def send(credit, product, requester, price, dates, done): 
     try:
-        fromaddr = credentials.getFROMADDR();
+        fromaddr = credentials.getFROMADDR()
         toaddr = credentials.getTOADDR()
         msg = MIMEMultipart()
         msg['From'] = fromaddr
@@ -26,7 +26,7 @@ def send(credit, product, requester, price, dates, done):
     
         server = smtplib.SMTP(credentials.getSMTP(), credentials.getSMTPPORT())
         server.starttls()
-        server.login(fromaddr, credentials.getSMTPPORT())
+        server.login(fromaddr, credentials.getMAILPASSWORD())
         text = msg.as_string()
         server.sendmail(fromaddr, toaddr.split(','), text)
         server.quit()
@@ -37,26 +37,22 @@ def send(credit, product, requester, price, dates, done):
         print(bcolors.color.FAIL + str(e) + bcolors.color.ENDC)
         print(bcolors.color.FAIL + "Error sending mail" + bcolors.color.ENDC)
 
-def sendError():
+def sendError(data):
     try:
-        fromaddr = "mailer@domain.com"
-        toaddr = 'recipient@domain.com, recipient2@domain.com'
+        fromaddr = credentials.getFROMADDR()
+        toaddr = credentials.getTOADDR()
         msg = MIMEMultipart()
         msg['From'] = fromaddr
         msg['To'] = toaddr
-        msg['Subject'] = "New entry on WG-App"
+        msg['Subject'] = "New error on WG-App"
     
-        body = "New entry: " + str(product) + "\n" + \
-        "Name: " + str(requester) + "\n" + \
-        "Price: " + str(price) + "\n" + \
-        "Date: " + str(dates) + "\n" + \
-        "New limit: " + str(credit)
+        body = data
 
         msg.attach(MIMEText(body, 'plain'))
     
-        server = smtplib.SMTP('smtp.domain.com', 587)
+        server = smtplib.SMTP(credentials.getSMTP(), credentials.getSMTPPORT())
         server.starttls()
-        server.login(fromaddr, "mailpassword")
+        server.login(fromaddr, credentials.getMAILPASSWORD())
         text = msg.as_string()
         server.sendmail(fromaddr, toaddr.split(','), text)
         server.quit()
