@@ -86,13 +86,13 @@ public class MainActivity extends AppCompatActivity {
     public void send(View view) {
         final String descriptionString = product.getText().toString();
         final String priceString = price.getText().toString();
-        if (priceString.equals("") && descriptionString.equals("")) {
+        if ("".equals(priceString) && "".equals(descriptionString)) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceAndProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
-        } else if (priceString.equals("")) {
+        } else if ("".equals(priceString)) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
-        } else if (descriptionString.equals("")) {
+        } else if ("".equals(descriptionString)) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
         } else {
