@@ -15,6 +15,7 @@ public class JsonHandler {
     private static final String REQUESTER ="requester";
     private static final String NEWESTAPPVERSION ="newestAppVersion";
     private static final String PRODUCT ="product";
+    private static final String DONE = "done";
     private static final String PRICE ="price";
 
     public static ServerResponse parseServerResponse(String json) throws JSONException {
@@ -40,6 +41,7 @@ public class JsonHandler {
             jsonRequest.put(REQUESTER, sendDetails.getSettings().getRequester());
             jsonRequest.put(PRICE, sendDetails.getRequestDetails().getPrice());
             jsonRequest.put(PRODUCT, sendDetails.getRequestDetails().getProduct());
+            jsonRequest.put(DONE, sendDetails.getRequestDetails().isDone());
             return jsonRequest.toString();
         } catch (JSONException e) {
             e.printStackTrace();

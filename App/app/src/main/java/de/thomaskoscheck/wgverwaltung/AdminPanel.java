@@ -54,7 +54,7 @@ public class AdminPanel extends AppCompatActivity {
 
                 TextView requesterTV = view.findViewById(R.id.requester);
                 String requesterRaw = requesterTV.getText().toString();
-                final String requester = requesterRaw.replace(getString(R.string.requester), "");
+                final String requester = requesterRaw.replace(getString(R.string.requester) + ": ", "");
 
                 buildAlertDialog(R.string.markDoneConfirmation, R.string.markDoneConfirmationText, android.R.string.yes, android.R.string.no, android.R.drawable.stat_sys_warning, new AlertDialogAnswerSelectedListener() {
                     @Override
