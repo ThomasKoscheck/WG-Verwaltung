@@ -76,8 +76,12 @@ def listen():
                     product, requester, price, dates, done = jsonHandler.parseJSON(data) # getting parsed data from json send from app
                     credit = sqlHandler.getCreditSQL() # get the actual credit
                     credit -= price # new credit
-                    sqlHandler.insertIntoSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database
-                    sendMail.send(credit, product, requester, price, dates, done) # send Email about entry
+                    if done is 0:
+                        sqlHandler.insertIntoSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database
+                        sendMail.send(credit, product, requester, price, dates, done) # send Email about entry
+
+                    elif done is 1:
+                        sqlHandler.updateSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database
 
                     current_connection.shutdown(1)
                     current_connection.close()
