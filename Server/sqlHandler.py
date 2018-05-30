@@ -45,7 +45,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
     # disconnect from server
     db.close()
 
-def updateSQL(credit, product, requester, price, dates, done):  
+def updateSQL(id):  
     # get login credentials from outside of webroot
     dbhost = credentials.getDBHOST()
     dbuser = credentials.getDBUSER()
@@ -62,11 +62,11 @@ def updateSQL(credit, product, requester, price, dates, done):
 
     # Prepare SQL query to INSERT a record into the database.
     sql = 'UPDATE %s SET done = 1' % (dbtable)
-    sql = sql + ' WHERE (requester = %s AND  date = %s)'
+    sql = sql + ' WHERE (id = %s)'
     
     try:
         # Execute the SQL command
-        cursor.execute(sql, (requester, dates))
+        cursor.execute(sql, (id,))
         # Commit your changes in the database
         db.commit()
 
@@ -116,4 +116,3 @@ def getCreditSQL():
     db.close()
 
     return credit
-

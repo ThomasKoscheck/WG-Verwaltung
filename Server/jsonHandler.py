@@ -13,14 +13,15 @@ def parseJSON(data):
     ''' Parsing important informations out of the given json string '''
     try:
         jsonData = json.loads(data)
+        id = jsonData['id']
         product = jsonData['product']
         requester = jsonData['requester']
         price = jsonData['price']
         dates = str(date.today())
-        done = 0
+        done = jsonData['done']
 
-        return product, requester, price, dates, done
-         
+        return id, product, requester, price, dates, done
+
     except Exception as e:
         print(bcolors.color.FAIL + str(e) + bcolors.color.ENDC)
         print(bcolors.color.FAIL + "Error parsing json" + bcolors.color.ENDC)
@@ -32,7 +33,6 @@ def buildJSON():
     dbpass = credentials.getDBPASS()
     dbname = credentials.getDBNAME()
     dbtable = credentials.getDBTABLE()
-    appVersion = credentials.getAPPVERSION()
 
     # Open database connection
     db = MySQLdb.connect(dbhost, dbuser, dbpass, dbname)
@@ -40,7 +40,7 @@ def buildJSON():
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
 
-    sql = "SELECT product, requester, price, date FROM %s \
+    sql = "SELECT id, product, requester, price, date FROM %s \
        WHERE done=0" % (dbtable)
 
     try:
@@ -53,22 +53,23 @@ def buildJSON():
         json = ""
 
         for row in results:
-            jsonstring += '{ "product":"' + str(row[0]) + '",' + \
-                    '"requester":"' + str(row[1]) + '",' + \
-                    '"price":"' + str(row[2]) + '",' +\
-                    '"date":"' + str(row[3]) + '"' + \
+            jsonstring += '{"id":"' + str(row[0]) + '",' + \
+                    '"product":"' + str(row[1]) + '",' + \
+                    '"requester":"' + str(row[2]) + '",' + \
+                    '"price":"' + str(row[3]) + '",' +\
+                    '"date":"' + str(row[4]) + '"' + \
                     "},"
 
         jsonstring = jsonstring[:-1]
 
-        # Now print fetched result
-        print(bcolors.color.OKBLUE + "--- Builded this json --- \n" + bcolors.color.ENDC + jsonstring + "\n")
-
         json = "{" + \
             '"credit":"' + str(sqlHandler.getCreditSQL()) + '",'  + \
-            '"newestAppVersion":"' + str(appVersion) + '",' + \
             '"expenses":[' + jsonstring + \
             "]}"
+
+        
+        # Now print fetched result
+        print(bcolors.color.OKBLUE + "--- Builded this json --- \n" + bcolors.color.ENDC + json + "\n")
 
         return json
 
@@ -78,4 +79,3 @@ def buildJSON():
 
     # disconnect from server
     db.close()
-    
