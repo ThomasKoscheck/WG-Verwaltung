@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -21,17 +22,24 @@ public class Cryptographics {
         Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 
-        byte[] encrypted = cipher.doFinal(generatedPaddedString(rawString).getBytes());
+        byte[] paddedBytes = generatedPaddedString(rawString.getBytes());
+
+        byte[] encrypted = cipher.doFinal(paddedBytes);
 
         return Base64.encodeToString(encrypted, Base64.DEFAULT);
     }
 
-    private static String generatedPaddedString(String input) {
-        StringBuilder stringBuilder = new StringBuilder(input);
-        while (stringBuilder.length() % 16 != 0) {
-            stringBuilder.append("?");
+    private static byte[] generatedPaddedString(byte[] input) {
+        int targetLength = input.length;
+        while (targetLength % 16 != 0) {
+            targetLength++;
         }
-        return stringBuilder.toString();
+        byte[] paddedArray = new byte[targetLength];
+        System.arraycopy(input, 0, paddedArray, 0, input.length);
+        for (int i = input.length; i < targetLength; i++) {
+            paddedArray[i] = 0x3f;
+        }
+        return paddedArray;
     }
 
 
@@ -48,7 +56,7 @@ public class Cryptographics {
                 stringBuilder.append("?");
                 passphraseLength++;
             }
-        } else if (passphraseLength < 32){
+        } else if (passphraseLength < 32) {
             while (passphraseLength != 32) {
                 stringBuilder.append("?");
                 passphraseLength++;
