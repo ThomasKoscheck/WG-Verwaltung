@@ -33,6 +33,7 @@ public class AdminPanel extends AppCompatActivity {
     private ListView listView;
     private Settings settings;
     private SimpleAdapter simpleAdapter;
+    private Expense[] expenses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,8 @@ public class AdminPanel extends AppCompatActivity {
     }
 
     private void markEntryAsDone(String description, String requester, double price) {
-        RequestDetails requestDetails = new RequestDetails(description, requester, price, 1);
+        int id = getId(description, requester, price);
+        RequestDetails requestDetails = new RequestDetails(description, requester, price, 1, id);
         SendRequestDetails sendDone = new SendRequestDetails();
         sendDone.setDataSentListener(new DataSentListener() {
             @Override
@@ -106,6 +108,15 @@ public class AdminPanel extends AppCompatActivity {
         sendDone.execute(new SendDetails(settings, requestDetails));
     }
 
+    private int getId(String description, String requester, double price) {
+        for (Expense expense : expenses) {
+            if (expense.getPrice() == price && expense.getProduct().equals(description) && expense.getRequester().equals(requester)) {
+                return expense.getId();
+            }
+        }
+        return 0;
+    }
+
     private void fetchDataFromServer() {
         GetServerData getServerData = new GetServerData();
         getServerData.setDataProcessedListener(new DataProcessedListener() {
@@ -113,7 +124,7 @@ public class AdminPanel extends AppCompatActivity {
             public void onDataLoaded(ServerResponse serverResponse) {
                 if (serverResponse != null) {
                     ArrayList<HashMap<String, String>> list = new ArrayList<>();
-                    Expense[] expenses = serverResponse.getExpenses();
+                    expenses = serverResponse.getExpenses();
                     HashMap<String, String> item;
                     for (Expense expense : expenses) {
                         item = new HashMap<>();

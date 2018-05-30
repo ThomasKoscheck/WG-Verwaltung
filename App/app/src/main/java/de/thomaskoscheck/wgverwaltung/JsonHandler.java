@@ -17,12 +17,13 @@ public class JsonHandler {
     private static final String PRODUCT ="product";
     private static final String DONE = "done";
     private static final String PRICE ="price";
-
+    private static final String ID = "id";
 
     public static ServerResponse parseServerResponse(String json) throws JSONException {
         JSONObject response = new JSONObject(json);
         String credit = response.getString(CREDIT);
-        String newestAppVersion = response.getString(NEWESTAPPVERSION);
+        //String newestAppVersion = response.getString(NEWESTAPPVERSION);
+        String newestAppVersion = "5";
         JSONArray expensesJson = response.getJSONArray(EXPENSES);
         Expense[] expenses = new Expense[expensesJson.length()];
 
@@ -31,7 +32,9 @@ public class JsonHandler {
             String product = expensesJson.getJSONObject(i).getString(PRODUCT);
             String priceString = expensesJson.getJSONObject(i).getString(PRICE);
             double price = Double.parseDouble(priceString);
-            expenses[i] = new Expense(requester, product, price);
+            String idString = expensesJson.getJSONObject(i).getString(ID);
+            int id = Integer.parseInt(idString);
+            expenses[i] = new Expense(requester, product, price, id);
         }
         return new ServerResponse(credit, newestAppVersion, expenses);
     }
@@ -43,6 +46,7 @@ public class JsonHandler {
             jsonRequest.put(PRICE, sendDetails.getRequestDetails().getPrice());
             jsonRequest.put(PRODUCT, sendDetails.getRequestDetails().getProduct());
             jsonRequest.put(DONE, sendDetails.getRequestDetails().getDone());
+            jsonRequest.put(ID, sendDetails.getRequestDetails().getId());
             return jsonRequest.toString();
         } catch (JSONException e) {
             e.printStackTrace();

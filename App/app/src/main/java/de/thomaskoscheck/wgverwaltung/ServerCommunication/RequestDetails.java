@@ -5,20 +5,23 @@ public class RequestDetails {
     private String requester;
     private double price;
     private int done;
+    private int id;
 
 
     public RequestDetails(String product, String requester, double price) {
         this.product = product;
         this.requester = requester;
         this.price = price;
-        done = 0;
+        this.done = 0;
+        this.id = -1;
     }
 
-    public RequestDetails(String product, String requester, double price, int done) {
+    public RequestDetails(String product, String requester, double price, int done, int id) {
         this.product = product;
         this.requester = requester;
         this.price = price;
         this.done = done;
+        this.id = id;
     }
 
     public String getProduct() {
@@ -35,5 +38,9 @@ public class RequestDetails {
 
     public int getDone() {
         return done;
+    }
+
+    public int getId() {
+        return id;
     }
 }

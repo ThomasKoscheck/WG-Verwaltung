@@ -4,11 +4,13 @@ public class Expense {
     private String requester;
     private String product;
     private double price;
+    private int id;
 
-    public Expense(String requester, String product, double price) {
+    public Expense(String requester, String product, double price, int id) {
         this.requester = requester;
         this.product = product;
         this.price = price;
+        this.id = id;
     }
 
     public String getRequester() {
@@ -21,6 +23,10 @@ public class Expense {
 
     public double getPrice() {
         return price;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
