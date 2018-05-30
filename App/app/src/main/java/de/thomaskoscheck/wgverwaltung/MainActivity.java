@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendRequest(String description, double price) {
-        RequestDetails requestDetails = new RequestDetails(description, price);
+        RequestDetails requestDetails = new RequestDetails(description, settings.getRequester(), price);
         SendRequestDetails sendRequestDetails = new SendRequestDetails();
         sendRequestDetails.setDataSentListener(new DataSentListener() {
             @Override
