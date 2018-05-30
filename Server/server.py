@@ -73,7 +73,7 @@ def listen():
                 else:
                     print(bcolors.color.OKBLUE + "--- Client sent this data ---\n" + bcolors.color.ENDC + data + "\n")
 
-                    id, product, requester, price, dates, done = jsonHandler.parseJSON(data) # getting parsed data from json send from app
+                    sqlId, product, requester, price, dates, done = jsonHandler.parseJSON(data) # getting parsed data from json send from app
                     credit = sqlHandler.getCreditSQL() # get the actual credit
                     credit -= price # new credit
 
@@ -83,7 +83,7 @@ def listen():
                           sendMail.send(credit, product, requester, price, dates, done) 
 
                     elif done is 1:
-                        sqlHandler.updateSQL(id)   # updating entry to done in SQL database
+                        sqlHandler.updateSQL(sqlId)   # updating entry to done in SQL database
 
                     current_connection.send(resultState)
                     current_connection.shutdown(1)

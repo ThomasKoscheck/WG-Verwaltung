@@ -29,7 +29,7 @@ def writeFile(file, content):
 
 def startServer():
     try:
-	    pathToFile = PATH + '/development/server.py'
+        pathToFile = PATH + '/development/server.py'
         proc = subprocess.Popen(['python', pathToFile, '9998'], close_fds=True)
         pid = proc.pid # access `pid` attribute to get the pid of the child process.
         return pid
