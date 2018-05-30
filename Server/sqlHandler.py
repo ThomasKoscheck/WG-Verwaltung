@@ -26,7 +26,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
        #(dbtable, credit, product, requester, price, dates, done)
 
     # Prepare SQL query to INSERT a record into the database.
-    sql = 'INSERT INTO ' + dbtable + '(credit, product, requester, price, date, done)'
+    sql = 'INSERT INTO %s (credit, product, requester, price, date, done)' % (dbtable)
     sql = sql + ' VALUES (%s, %s, %s, %s, %s, %s)'
     
     try:
