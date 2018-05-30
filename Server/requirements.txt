@@ -1,0 +1,10 @@
+socket
+MySQLdb
+Crypto
+base64
+six.moves
+smtplib
+email.MIMEMultipart
+email.MIMEText
+subprocess
+json

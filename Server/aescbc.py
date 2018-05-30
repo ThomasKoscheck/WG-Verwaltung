@@ -1,7 +1,6 @@
 #!/usr/bin python
 # -*- coding: utf-8 -*-
 
-from Crypto import Random
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 from os import urandom
@@ -11,6 +10,12 @@ def generatePadding(data):
     while len(data)%16 != 0:
         data += "?"
     
+    return data
+
+def removePadding(data):
+    while data.endswith('?'):
+	data = data[:-1]
+ 
     return data
 
 def generateIV(length):
@@ -32,10 +37,10 @@ def encrypt(message, passphrase, IV):
 def decrypt(encrypted, passphrase, IV):
     print("Key: " + passphrase)
     passphrase = padPassphrase(passphrase)
-    print("Key: " + passphrase)
     aes = AES.new(passphrase, AES.MODE_CBC, IV)
     print(bcolors.color.HEADER + "--- Decrypted the data succesfully ---\n" + bcolors.color.ENDC)
     decrypted = aes.decrypt(b64decode(encrypted))
+    decrypted = removePadding(decrypted)
     return decrypted
 
 def padPassphrase(passphrase):
