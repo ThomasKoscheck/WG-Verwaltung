@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Currency;
+import java.util.Locale;
+
 import de.thomaskoscheck.wgverwaltung.listener.AlertDialogAnswerSelectedListener;
 import de.thomaskoscheck.wgverwaltung.listener.DataProcessedListener;
 import de.thomaskoscheck.wgverwaltung.listener.DataSentListener;
@@ -153,10 +156,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataLoaded(ServerResponse serverResponse) {
                 if (serverResponse != null) {
-                    leftCredit.setText(serverResponse.getCredit());
+                    leftCredit.setText(serverResponse.getCredit()+getCurrencySymbol());
                 }
             }
         });
         getServerData.execute(new GetDetails(settings));
+    }
+
+
+    private String getCurrencySymbol() {
+        Currency currency = Currency.getInstance(Locale.getDefault());
+        return currency.getSymbol();
     }
 }
