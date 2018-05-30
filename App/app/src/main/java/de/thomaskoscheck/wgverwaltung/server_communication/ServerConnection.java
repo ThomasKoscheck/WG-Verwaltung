@@ -1,8 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.ServerCommunication;
-
-import android.os.AsyncTask;
-
-import org.json.JSONException;
+package de.thomaskoscheck.wgverwaltung.server_communication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,32 +9,29 @@ import java.io.Reader;
 import java.net.Socket;
 
 import de.thomaskoscheck.wgverwaltung.Cryptographics;
-import de.thomaskoscheck.wgverwaltung.JsonHandler;
-import de.thomaskoscheck.wgverwaltung.Listener.DataProcessedListener;
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
 import de.thomaskoscheck.wgverwaltung.StringHelper;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
 
-public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
-    private DataProcessedListener dataProcessedListener;
-    private final String TOWRITE = "getServerData";
+public class ServerConnection {
     private Settings settings;
-    private Socket socket;
     private InputStream inputStream;
     private OutputStream outputStream;
     private byte[] passphraseHex;
     private String initVector;
 
-    @Override
-    protected ServerResponse doInBackground(GetDetails... params) {
+    ServerConnection(Settings settings) {
+        this.settings = settings;
+    }
+
+    public String sendData(String data) {
         try {
-            settings = params[0].getSettings();
-            socket = new Socket(settings.getServer(), settings.getPort());
+            Socket socket = new Socket(settings.getServer(), settings.getPort());
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
             passphraseHex = Cryptographics.generateHexPassphrase(settings.getPassword());
             initVector = getInitVector();
 
-            String encrypted = Cryptographics.encryptString(TOWRITE, passphraseHex, initVector);
+            String encrypted = Cryptographics.encryptString(data, passphraseHex, initVector);
             writeEncryptedData(encrypted);
 
             String serverResponseDecrypted = getDecryptedServerData();
@@ -46,8 +39,7 @@ public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
             inputStream.close();
             outputStream.close();
             socket.close();
-
-            return getServerResponse(serverResponseDecrypted);
+            return serverResponseDecrypted;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -73,19 +65,6 @@ public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
         return Cryptographics.decryptString(serverResponseEncrypted, passphraseHex, initVector);
     }
 
-    private ServerResponse getServerResponse(String serverResponseDecrypted) throws JSONException {
-        if (serverResponseDecrypted == null)
-            throw new NullPointerException();
-
-        else if(serverResponseDecrypted == "-1") {
-            Expense[] expenses = new Expense[0];
-            return new ServerResponse("","", expenses);
-        }
-
-
-        return JsonHandler.parseJson(serverResponseDecrypted);
-    }
-
     private String readStream(int maxReadSize) throws IOException {
         Reader reader;
         reader = new InputStreamReader(inputStream, "UTF-8");
@@ -100,15 +79,5 @@ public class GetServerData extends AsyncTask<GetDetails, Void, ServerResponse> {
             maxReadSize -= readSize;
         }
         return stringBuilder.toString();
-    }
-
-    public void setDataProcessedListener(DataProcessedListener dataProcessedListener) {
-        this.dataProcessedListener = dataProcessedListener;
-    }
-
-    @Override
-    protected void onPostExecute(ServerResponse serverResponse) {
-        super.onPostExecute(serverResponse);
-        dataProcessedListener.onDataLoaded(serverResponse);
     }
 }

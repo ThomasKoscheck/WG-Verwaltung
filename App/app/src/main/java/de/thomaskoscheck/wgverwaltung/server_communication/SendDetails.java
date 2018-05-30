@@ -1,6 +1,6 @@
-package de.thomaskoscheck.wgverwaltung.ServerCommunication;
+package de.thomaskoscheck.wgverwaltung.server_communication;
 
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
 
 public class SendDetails {
     private Settings settings;
