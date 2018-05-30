@@ -6,7 +6,7 @@ from subprocess import Popen
 import sendMail
 from datetime import date
 
-PATH = '/path/to/my/server/location/'
+PATH = '/path/to/your/server/folder'
 PIDFILE = PATH + "/pid.txt"
 
 def readFile(filePath):
@@ -29,7 +29,7 @@ def writeFile(filePath, content):
 def startServer():
     try:
         pathToFile = PATH + '/development/server.py'
-        proc = Popen(['python', pathToFile, '9998'], close_fds=True)
+        proc = Popen(['python', pathToFile, '9998 &'], close_fds=True)
         pid = proc.pid # access `pid` attribute to get the pid of the child process.
         return pid
 
@@ -61,7 +61,7 @@ def cloneRepo():
         os.system('rm -rf ' + PATH + '/development/')
         
         # clone current branch
-        git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
+        git_command = 'git clone --quiet --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
         os.system(git_command)
         
         # move and cleanup code
@@ -77,7 +77,7 @@ def manipulateFiles():
     try:
         # exchange path to config.ini in credentials.py
         filedata_credentials = readFile(PATH + '/development/credentials.py')
-        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/path/to/my/config/file')
+        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/path/to/your/config/file')
         writeFile(PATH +"/development/credentials.py", filedata_credentials)
 
         # exchange database calling no.1

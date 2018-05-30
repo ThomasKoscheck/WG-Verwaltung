@@ -3,7 +3,7 @@
     <string name="app_name">WGVerwaltung</string>
     <string name="send">Absenden</string>
     <string name="save">Speichern</string>
-    <string name="requesterHint">Dein Name hier</string>
+    <string name="requester">Dein Name hier</string>
     <string name="price">Preis</string>
     <string name="password">Frage den Server Admin nach dem Passwort</string>
     <string name="expenseDescription">Beschreibung der Ausgabe</string>
@@ -22,8 +22,4 @@
     <string name="refreshing">Aktualisiere</string>
     <string name="port">Bitte gib die Port Nummer ein</string>
     <string name="title_activity_settings_activity">Einstellungen</string>
-    <string name="requester">Käufer</string>
-    <string name="title_activity_admin_panel">Admin Panel</string>
-    <string name="markDoneConfirmation">Als beyahlt markieren_</string>
-    <string name="markDoneConfirmationText">Willst du den Eintrag wirklich als bezahlt markieren?</string>
 </resources>

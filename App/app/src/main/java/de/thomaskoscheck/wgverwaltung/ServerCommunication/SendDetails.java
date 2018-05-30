@@ -1,10 +1,10 @@
-package de.thomaskoscheck.wgverwaltung.server_communication;
+package de.thomaskoscheck.wgverwaltung.ServerCommunication;
 
-import de.thomaskoscheck.wgverwaltung.setting.Settings;
+import de.thomaskoscheck.wgverwaltung.Setting.Settings;
 
 public class SendDetails {
-    private final Settings settings;
-    private final RequestDetails requestDetails;
+    private Settings settings;
+    private RequestDetails requestDetails;
 
     public SendDetails(Settings settings, RequestDetails requestDetails) {
         this.settings = settings;

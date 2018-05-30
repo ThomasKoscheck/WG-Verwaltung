@@ -23,7 +23,6 @@ except Exception as e:
     print(bcolors.color.FAIL + "--- You have to pass a port as argument (python server.py 9999) ---\n" + bcolors.color.ENDC + "\n")
     sys.exit() 
 
-
 # uncomment print lines for better debugging    
 def listen():
     try:  
@@ -31,6 +30,7 @@ def listen():
         connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         connection.bind(('0.0.0.0', int(sys.argv[1])))
         connection.listen(10)
+
         while True:
             current_connection, address = connection.accept()
             while True:            
@@ -80,16 +80,17 @@ def listen():
                     if done is 0:
                         resultState = sqlHandler.insertIntoSQL(credit, product, requester, price, dates, done)   # inserting date into SQL database
                         if resultState == 1:   # send Email about entry only in case of success 
-                          sendMail.send(credit, product, requester, price, dates, done) 
+                            sendMail.send(credit, product, requester, price, dates, done) 
 
                     elif done is 1:
                         sqlHandler.updateSQL(sqlId)   # updating entry to done in SQL database
 
-                    current_connection.send(resultState)
                     current_connection.shutdown(1)
                     current_connection.close()
                     print(bcolors.color.WARNING + "--- Closed connection ---\n" + bcolors.color.ENDC)
                     break
+        sleep(1)
+
 
     except Exception as e:    
         print(bcolors.color.FAIL + str(e) + bcolors.color.ENDC)
@@ -97,8 +98,7 @@ def listen():
         current_connection.shutdown(1)
         current_connection.close()
           
-    sleep(1)
-
+    
 if __name__ == "__main__":
     try:
         print(bcolors.color.OKGREEN + "--- Starting Server ---\n" + bcolors.color.ENDC)
