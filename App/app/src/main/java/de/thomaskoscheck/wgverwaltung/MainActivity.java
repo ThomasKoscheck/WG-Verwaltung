@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendRequest(String description, double price) {
-        RequestDetails requestDetails = new RequestDetails(description, settings.getRequester(), price);
+        RequestDetails requestDetails = new RequestDetails(description, price);
         SendRequestDetails sendRequestDetails = new SendRequestDetails();
         sendRequestDetails.setDataSentListener(new DataSentListener() {
             @Override
@@ -154,10 +154,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataLoaded(ServerResponse serverResponse) {
                 if (serverResponse != null) {
                     leftCredit.setText(serverResponse.getCredit());
-                    if(serverResponse.getCredit().equals("")){
-                        Toast somethingWentWrong = Toast.makeText(getApplicationContext(), R.string.errorOnServerAction, Toast.LENGTH_LONG);
-                        somethingWentWrong.show();
-                    }
                 }
             }
         });

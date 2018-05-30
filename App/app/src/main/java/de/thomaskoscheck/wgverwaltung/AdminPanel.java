@@ -97,7 +97,7 @@ public class AdminPanel extends AppCompatActivity {
 
     private void markEntryAsDone(String description, String requester, double price) {
         int id = getId(description, requester, price);
-        RequestDetails requestDetails = new RequestDetails(description, requester, price, 1, id);
+        RequestDetails requestDetails = new RequestDetails(description, price, 1, id);
         SendRequestDetails sendDone = new SendRequestDetails();
         sendDone.setDataSentListener(new DataSentListener() {
             @Override
