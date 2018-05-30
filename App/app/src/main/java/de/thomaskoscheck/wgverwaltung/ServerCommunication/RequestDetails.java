@@ -4,17 +4,17 @@ public class RequestDetails {
     private String product;
     private String requester;
     private double price;
-    private boolean done;
+    private int done;
 
 
     public RequestDetails(String product, String requester, double price) {
         this.product = product;
         this.requester = requester;
         this.price = price;
-        done = false;
+        done = 0;
     }
 
-    public RequestDetails(String product, String requester, double price, boolean done) {
+    public RequestDetails(String product, String requester, double price, int done) {
         this.product = product;
         this.requester = requester;
         this.price = price;
@@ -29,11 +29,11 @@ public class RequestDetails {
         return price;
     }
 
-    public boolean isDone() {
-        return done;
-    }
-
     public String getRequester() {
         return requester;
+    }
+
+    public int getDone() {
+        return done;
     }
 }
