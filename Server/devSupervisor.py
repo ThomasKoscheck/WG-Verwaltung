@@ -59,16 +59,16 @@ def killOldServer():
 
 def cloneRepo():
     try:
-	    os.system('rm -rf ' + PATH + '/development/')
-	
+        os.system('rm -rf ' + PATH + '/development/')
+        
         # clone current branch
-       	git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
+        git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
         os.system(git_command)
         
         # move and cleanup code
         os.system('mkdir -p ' + PATH + '/development/')
-	    mv_command = 'mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/'
-	    os.system(mv_command)
+        mv_command = 'mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/'
+        os.system(mv_command)
         os.system('rm -rf ' + PATH + '/WG-Verwaltung/')
 
     except Exception as e:

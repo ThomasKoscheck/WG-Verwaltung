@@ -19,7 +19,7 @@ AES_BLOCK_SIZE = 16
 try:
     sys.argv[1]
 
-except:
+except Exception as e:
     print(bcolors.color.FAIL + "--- You have to pass a port as argument (python server.py 9999) ---\n" + bcolors.color.ENDC + "\n")
     sys.exit() 
 
