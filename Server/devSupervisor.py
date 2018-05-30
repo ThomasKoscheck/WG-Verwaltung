@@ -61,7 +61,7 @@ def cloneRepo():
         os.system('rm -rf ' + PATH + '/development/')
         
         # clone current branch
-        git_command = 'git clone --branch --quiet server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
+        git_command = 'git clone --quiet --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
         os.system(git_command)
         
         # move and cleanup code
