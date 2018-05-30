@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.Listener;
+package de.thomaskoscheck.wgverwaltung.listener;
 
 public interface DataSentListener {
     void onDataSent(boolean succeeded);

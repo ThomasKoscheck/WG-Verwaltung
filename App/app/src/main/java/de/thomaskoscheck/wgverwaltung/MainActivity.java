@@ -3,31 +3,28 @@ package de.thomaskoscheck.wgverwaltung;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.thomaskoscheck.wgverwaltung.Listener.AlertDialogAnswerSelectedListener;
-import de.thomaskoscheck.wgverwaltung.Listener.DataProcessedListener;
-import de.thomaskoscheck.wgverwaltung.Listener.DataSentListener;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetServerData;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.RequestDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendRequestDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
-import de.thomaskoscheck.wgverwaltung.Setting.SettingsActivity;
-import de.thomaskoscheck.wgverwaltung.Setting.SettingsStore;
+import de.thomaskoscheck.wgverwaltung.listener.AlertDialogAnswerSelectedListener;
+import de.thomaskoscheck.wgverwaltung.listener.DataProcessedListener;
+import de.thomaskoscheck.wgverwaltung.listener.DataSentListener;
+import de.thomaskoscheck.wgverwaltung.server_communication.GetDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.GetServerData;
+import de.thomaskoscheck.wgverwaltung.server_communication.RequestDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.SendDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.SendRequestDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.ServerResponse;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
+import de.thomaskoscheck.wgverwaltung.setting.SettingsActivity;
+import de.thomaskoscheck.wgverwaltung.setting.SettingsStore;
 
 public class MainActivity extends AppCompatActivity {
     private EditText product;
@@ -89,13 +86,13 @@ public class MainActivity extends AppCompatActivity {
     public void send(View view) {
         final String descriptionString = product.getText().toString();
         final String priceString = price.getText().toString();
-        if (priceString.equals("") && descriptionString.equals("")) {
+        if ("".equals(priceString) && "".equals(descriptionString)) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceAndProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
-        } else if (priceString.equals("")) {
+        } else if ("".equals(priceString)) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoPriceSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
-        } else if (descriptionString.equals("")) {
+        } else if ("".equals(descriptionString)) {
             Toast errorNoPrice = Toast.makeText(this, R.string.errorNoProductSet, Toast.LENGTH_LONG);
             errorNoPrice.show();
         } else {

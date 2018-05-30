@@ -1,5 +1,6 @@
-package de.thomaskoscheck.wgverwaltung.Setting;
+package de.thomaskoscheck.wgverwaltung.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,14 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.thomaskoscheck.wgverwaltung.AdminPanel;
 import de.thomaskoscheck.wgverwaltung.R;
 
 public class SettingsActivity extends AppCompatActivity {
-    EditText passwordField;
-    EditText requesterField;
-    EditText serverField;
-    EditText portField;
-    Settings settings;
+    private EditText passwordField;
+    private EditText requesterField;
+    private EditText serverField;
+    private EditText portField;
+    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,5 +75,10 @@ public class SettingsActivity extends AppCompatActivity {
         Toast settingsSaved = Toast.makeText(this, R.string.settingsSaved, Toast.LENGTH_LONG);
         settingsSaved.show();
         finish();
+    }
+
+    public void launchAdminList(View view){
+        Intent intent = new Intent(this, AdminPanel.class);
+        startActivity(intent);
     }
 }

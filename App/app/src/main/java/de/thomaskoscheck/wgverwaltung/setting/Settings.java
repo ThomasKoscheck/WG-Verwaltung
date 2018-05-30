@@ -1,4 +1,4 @@
-package de.thomaskoscheck.wgverwaltung.Setting;
+package de.thomaskoscheck.wgverwaltung.setting;
 
 public class Settings {
     private String password;
