@@ -48,6 +48,41 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
     # disconnect from server
     db.close()
 
+def updateSQL(id):  
+    # get login credentials from outside of webroot
+    dbhost = credentials.getDBHOST()
+    dbuser = credentials.getDBUSER()
+    dbpass = credentials.getDBPASS()
+    dbname = credentials.getDBNAME()
+    dbtable = credentials.getDBTABLE()
+
+    # Connect to MariaDB  
+    # Open database connection
+    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname)
+
+    # prepare a cursor object using cursor() method
+    cursor = db.cursor()
+
+    # Prepare SQL query to INSERT a record into the database.
+    sql = 'UPDATE %s SET done = 1' % (dbtable)
+    sql = sql + ' WHERE (id = %s)'
+    
+    try:
+        # Execute the SQL command
+        cursor.execute(sql, (id,))
+        # Commit your changes in the database
+        db.commit()
+
+        print(bcolors.color.OKGREEN + "--- Updated entry in database ---\n" + bcolors.color.ENDC)
+
+    except Exception as e:
+        print(bcolors.color.FAIL+ str(e) +bcolors.color.ENDC)
+        # Rollback in case there is any error
+        db.rollback()
+
+    # disconnect from server
+    db.close()
+
 def getCreditSQL():
     # get login credentials from outside of webroot
     dbhost = credentials.getDBHOST()
