@@ -16,14 +16,10 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
 
     # Connect to MariaDB  
     # Open database connection
-    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname)
+    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname, use_unicode=True, charset="utf8")
 
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
-
-    #   sql = "INSERT INTO %s (credit, product, requester, price, date, done) \
-      # VALUES ('%f', '%s', '%s', '%f', '%s', '%i' )" % \
-       #(dbtable, credit, product, requester, price, dates, done)
 
     # Prepare SQL query to INSERT a record into the database.
     sql = 'INSERT INTO %s (credit, product, requester, price, date, done)' % (dbtable)
@@ -58,7 +54,7 @@ def updateSQL(sqlId):
 
     # Connect to MariaDB  
     # Open database connection
-    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname)
+    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname, use_unicode=True, charset="utf8")
 
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
@@ -94,7 +90,7 @@ def getCreditSQL():
 
     # Connect to MariaDB  
     # Open database connection
-    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname)
+    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname, use_unicode=True, charset="utf8")
 
     # prepare a cursor object using cursor() method
     cursor = db.cursor()

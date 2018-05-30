@@ -4,6 +4,7 @@
 import json
 from datetime import date
 import MySQLdb
+import sys
 
 import bcolors
 import credentials
@@ -27,6 +28,9 @@ def parseJSON(data):
         print(bcolors.color.FAIL + "Error parsing json" + bcolors.color.ENDC)
 
 def buildJSON():
+    reload(sys)
+    sys.setdefaultencoding("utf-8")
+
     # get login credentials from outside of webroot
     dbhost = credentials.getDBHOST()
     dbuser = credentials.getDBUSER()
@@ -35,7 +39,7 @@ def buildJSON():
     dbtable = credentials.getDBTABLE()
 
     # Open database connection
-    db = MySQLdb.connect(dbhost, dbuser, dbpass, dbname)
+    db = MySQLdb.connect('%s' % dbhost, '%s' % dbuser, '%s' %dbpass, '%s' %dbname, use_unicode=True, charset="utf8")
 
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
@@ -53,17 +57,17 @@ def buildJSON():
         json = ""
 
         for row in results:
-            jsonstring += '{"id":"' + str(row[0]) + '",' + \
-                    '"product":"' + str(row[1]) + '",' + \
-                    '"requester":"' + str(row[2]) + '",' + \
-                    '"price":"' + str(row[3]) + '",' +\
-                    '"date":"' + str(row[4]) + '"' + \
+            jsonstring += '{"id":"' + str(row[0]).encode('utf-8') + '",' + \
+                    '"product":"' + str(row[1]).encode('utf-8') + '",' + \
+                    '"requester":"' + str(row[2]).encode('utf-8') + '",' + \
+                    '"price":"' + str(row[3]).encode('utf-8') + '",' +\
+                    '"date":"' + str(row[4]).encode('utf-8') + '"' + \
                     "},"
 
         jsonstring = jsonstring[:-1]
 
         json = "{" + \
-            '"credit":"' + str(sqlHandler.getCreditSQL()) + '",'  + \
+            '"credit":"' + str(sqlHandler.getCreditSQL()).encode('utf-8') + '",'  + \
             '"expenses":[' + jsonstring + \
             "]}"
 

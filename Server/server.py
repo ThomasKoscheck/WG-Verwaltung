@@ -23,6 +23,7 @@ except Exception as e:
     print(bcolors.color.FAIL + "--- You have to pass a port as argument (python server.py 9999) ---\n" + bcolors.color.ENDC + "\n")
     sys.exit() 
 
+
 # uncomment print lines for better debugging    
 def listen():
     try:  

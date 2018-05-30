@@ -6,7 +6,7 @@ from subprocess import Popen
 import sendMail
 from datetime import date
 
-PATH = '/path/to/your/server/folder'
+PATH = '/var/www/thomaskoscheck.de/public_html/projekte/wg-verwaltung/server'
 PIDFILE = PATH + "/pid.txt"
 
 def readFile(filePath):
@@ -52,8 +52,8 @@ def killOldServer():
 
     # always breaks on first run, because no old devServer exists
     except Exception as e:
-	    print(e)
-        pass
+	 print(e)
+       	 pass
 
 
 def cloneRepo():
@@ -61,7 +61,7 @@ def cloneRepo():
         os.system('rm -rf ' + PATH + '/development/')
         
         # clone current branch
-        git_command = 'git clone --branch --quiet server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
+        git_command = 'git clone --quiet --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
         os.system(git_command)
         
         # move and cleanup code
@@ -77,7 +77,7 @@ def manipulateFiles():
     try:
         # exchange path to config.ini in credentials.py
         filedata_credentials = readFile(PATH + '/development/credentials.py')
-        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/path/to/your/config/file')
+        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/var/www/thomaskoscheck.de/credentials/config.ini')
         writeFile(PATH +"/development/credentials.py", filedata_credentials)
 
         # exchange database calling no.1
