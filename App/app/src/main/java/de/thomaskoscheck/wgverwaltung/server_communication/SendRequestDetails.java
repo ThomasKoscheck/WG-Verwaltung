@@ -8,11 +8,10 @@ import de.thomaskoscheck.wgverwaltung.setting.Settings;
 
 public class SendRequestDetails extends AsyncTask<SendDetails, Void, Boolean> {
     private DataSentListener dataSentListener;
-    private Settings settings;
 
     @Override
     protected Boolean doInBackground(SendDetails... params) {
-        settings = params[0].getSettings();
+        Settings settings = params[0].getSettings();
 
         String jsonString = JsonHandler.generateJsonString(params[0]);
 

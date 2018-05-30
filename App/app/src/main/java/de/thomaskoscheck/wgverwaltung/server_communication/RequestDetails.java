@@ -1,12 +1,11 @@
 package de.thomaskoscheck.wgverwaltung.server_communication;
 
 public class RequestDetails {
-    private String product;
-    private String requester;
-    private double price;
-    private int done;
-    private int id;
-
+    private final String product;
+    private final String requester;
+    private final double price;
+    private final int done;
+    private final int id;
 
     public RequestDetails(String product, String requester, double price) {
         this.product = product;
@@ -30,10 +29,6 @@ public class RequestDetails {
 
     public double getPrice() {
         return price;
-    }
-
-    public String getRequester() {
-        return requester;
     }
 
     public int getDone() {

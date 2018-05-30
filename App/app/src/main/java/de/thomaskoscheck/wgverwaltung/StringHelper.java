@@ -2,10 +2,10 @@ package de.thomaskoscheck.wgverwaltung;
 
 public class StringHelper {
     public static String getStringWithZeros(int number, int amountOfCharacters) {
-        String filledString = String.valueOf(number);
+        StringBuilder filledString = new StringBuilder(String.valueOf(number));
         while (filledString.length() < amountOfCharacters) {
-            filledString = "0" + filledString;
+            filledString.insert(0, "0");
         }
-        return filledString;
+        return filledString.toString();
     }
 }

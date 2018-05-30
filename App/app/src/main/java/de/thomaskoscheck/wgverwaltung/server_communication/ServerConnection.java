@@ -12,8 +12,8 @@ import de.thomaskoscheck.wgverwaltung.Cryptographics;
 import de.thomaskoscheck.wgverwaltung.StringHelper;
 import de.thomaskoscheck.wgverwaltung.setting.Settings;
 
-public class ServerConnection {
-    private Settings settings;
+class ServerConnection {
+    private final Settings settings;
     private InputStream inputStream;
     private OutputStream outputStream;
     private byte[] passphraseHex;

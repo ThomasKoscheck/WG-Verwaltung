@@ -1,10 +1,10 @@
 package de.thomaskoscheck.wgverwaltung.server_communication;
 
 public class Expense {
-    private String requester;
-    private String product;
-    private double price;
-    private int id;
+    private final String requester;
+    private final String product;
+    private final double price;
+    private final int id;
 
     public Expense(String requester, String product, double price, int id) {
         this.requester = requester;

@@ -23,4 +23,7 @@
     <string name="port">Bitte gib die Port Nummer ein</string>
     <string name="title_activity_settings_activity">Einstellungen</string>
     <string name="requester">Käufer</string>
+    <string name="title_activity_admin_panel">Admin Panel</string>
+    <string name="markDoneConfirmation">Als beyahlt markieren_</string>
+    <string name="markDoneConfirmationText">Willst du den Eintrag wirklich als bezahlt markieren?</string>
 </resources>

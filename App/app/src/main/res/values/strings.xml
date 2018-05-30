@@ -31,5 +31,4 @@
     <string name="markDoneConfirmation">Mark as paid?</string>
     <string name="requester">Buyer</string>
     <string name="markDoneConfirmationText">Do you really want to mark this entry as paid?</string>
-    <string name="errorOnServerAction">An error occured processing the data. Please check the data and password.</string>
 </resources>
