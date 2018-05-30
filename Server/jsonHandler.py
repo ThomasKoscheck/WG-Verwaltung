@@ -13,14 +13,14 @@ def parseJSON(data):
     ''' Parsing important informations out of the given json string '''
     try:
         jsonData = json.loads(data)
-        id = jsonData['id']
+        sqlId = jsonData['id']
         product = jsonData['product']
         requester = jsonData['requester']
         price = jsonData['price']
         dates = str(date.today())
         done = jsonData['done']
 
-        return id, product, requester, price, dates, done
+        return sqlId, product, requester, price, dates, done
 
     except Exception as e:
         print(bcolors.color.FAIL + str(e) + bcolors.color.ENDC)

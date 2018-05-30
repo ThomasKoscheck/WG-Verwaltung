@@ -2,26 +2,25 @@
 # -*- coding: utf-8 -*-
 
 import os
-import subprocess
+from subprocess import Popen
 import sendMail
 from datetime import date
-import fileinput
 
-PATH = '/var/www/thomaskoscheck.de/public_html/projekte/wg-verwaltung/server'
+PATH = '/path/to/my/server/location/'
 PIDFILE = PATH + "/pid.txt"
 
-def readFile(file):
+def readFile(filePath):
     try:
-        file = open(file, "r") 
+        file = open(filePath, "r") 
         data = file.read() 
         file.close() 
         return data
     except Exception as e:
         print(e)
 
-def writeFile(file, content):
+def writeFile(filePath, content):
     try:
-        file = open(file, "w")
+        file = open(filePath, "w")
         file.write(str(content))
         file.close()
     except Exception as e:
@@ -29,8 +28,8 @@ def writeFile(file, content):
 
 def startServer():
     try:
-	    pathToFile = PATH + '/development/server.py'
-        proc = subprocess.Popen(['python', pathToFile, '9998'], close_fds=True)
+        pathToFile = PATH + '/development/server.py'
+        proc = Popen(['python', pathToFile, '9998'], close_fds=True)
         pid = proc.pid # access `pid` attribute to get the pid of the child process.
         return pid
 
@@ -43,32 +42,32 @@ def killOldServer():
     try:
         # read pid in file
         # I do nor reuse readFile(), because I dont want exception handling 
-        file = open(PIDFILE, "r") 
-        oldPid = file.read() 
-        file.close() 
+        pidFile = open(PIDFILE, "r") 
+        oldPid = pidFile.read() 
+        pidFile.close() 
 
-        # kill running server
+        # kill runnng server
         killStatement = 'kill ' +  str(oldPid)
         os.system(killStatement)
 
     # always breaks on first run, because no old devServer exists
     except Exception as e:
-	print(e)
+	    print(e)
         pass
 
 
 def cloneRepo():
     try:
-	    os.system('rm -rf ' + PATH + '/development/')
-	
+        os.system('rm -rf ' + PATH + '/development/')
+        
         # clone current branch
-       	git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
+        git_command = 'git clone --branch server-development https://github.com/ThomasKoscheck/WG-Verwaltung.git ' + PATH + '/WG-Verwaltung/'
         os.system(git_command)
         
         # move and cleanup code
         os.system('mkdir -p ' + PATH + '/development/')
-	    mv_command = 'mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/'
-	    os.system(mv_command)
+        mv_command = 'mv ' + PATH + '/WG-Verwaltung/Server/* ' + PATH +'/development/'
+        os.system(mv_command)
         os.system('rm -rf ' + PATH + '/WG-Verwaltung/')
 
     except Exception as e:
@@ -78,7 +77,7 @@ def manipulateFiles():
     try:
         # exchange path to config.ini in credentials.py
         filedata_credentials = readFile(PATH + '/development/credentials.py')
-        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/var/www/thomaskoscheck.de/credentials/config.ini')
+        filedata_credentials = filedata_credentials.replace('/path-to-config-ini-file', '/path/to/my/config/file')
         writeFile(PATH +"/development/credentials.py", filedata_credentials)
 
         # exchange database calling no.1

@@ -48,7 +48,7 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
     # disconnect from server
     db.close()
 
-def updateSQL(id):  
+def updateSQL(sqlId):  
     # get login credentials from outside of webroot
     dbhost = credentials.getDBHOST()
     dbuser = credentials.getDBUSER()
@@ -69,7 +69,7 @@ def updateSQL(id):
     
     try:
         # Execute the SQL command
-        cursor.execute(sql, (id,))
+        cursor.execute(sql, (sqlId,))
         # Commit your changes in the database
         db.commit()
 
