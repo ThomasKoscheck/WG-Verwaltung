@@ -16,18 +16,18 @@ import java.util.Currency;
 import java.util.HashMap;
 import java.util.Locale;
 
-import de.thomaskoscheck.wgverwaltung.Listener.AlertDialogAnswerSelectedListener;
-import de.thomaskoscheck.wgverwaltung.Listener.DataProcessedListener;
-import de.thomaskoscheck.wgverwaltung.Listener.DataSentListener;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.Expense;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.GetServerData;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.RequestDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.SendRequestDetails;
-import de.thomaskoscheck.wgverwaltung.ServerCommunication.ServerResponse;
-import de.thomaskoscheck.wgverwaltung.Setting.Settings;
-import de.thomaskoscheck.wgverwaltung.Setting.SettingsStore;
+import de.thomaskoscheck.wgverwaltung.listener.AlertDialogAnswerSelectedListener;
+import de.thomaskoscheck.wgverwaltung.listener.DataProcessedListener;
+import de.thomaskoscheck.wgverwaltung.listener.DataSentListener;
+import de.thomaskoscheck.wgverwaltung.server_communication.Expense;
+import de.thomaskoscheck.wgverwaltung.server_communication.GetDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.GetServerData;
+import de.thomaskoscheck.wgverwaltung.server_communication.RequestDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.SendDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.SendRequestDetails;
+import de.thomaskoscheck.wgverwaltung.server_communication.ServerResponse;
+import de.thomaskoscheck.wgverwaltung.setting.Settings;
+import de.thomaskoscheck.wgverwaltung.setting.SettingsStore;
 
 public class AdminPanel extends AppCompatActivity {
     private ListView listView;

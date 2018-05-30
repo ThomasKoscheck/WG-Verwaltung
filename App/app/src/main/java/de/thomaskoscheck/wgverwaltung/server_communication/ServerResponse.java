@@ -12,4 +12,8 @@ public class ServerResponse {
     public String getCredit() {
         return credit;
     }
+
+    public Expense[] getExpenses() {
+        return expenses;
+    }
 }
