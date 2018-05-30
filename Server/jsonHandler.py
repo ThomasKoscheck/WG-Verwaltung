@@ -76,6 +76,7 @@ def buildJSON():
     except Exception as e:
         print(bcolors.color.FAIL+ str(e) +bcolors.color.ENDC)
         print(bcolors.color.FAIL + "Error: unable to fetch data or build json" + bcolors.color.ENDC)
-
+        return -1
+        
     # disconnect from server
-    db.close()
+    db.close()   

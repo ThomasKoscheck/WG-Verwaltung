@@ -36,11 +36,14 @@ def insertIntoSQL(credit, product, requester, price, dates, done):
         db.commit()
 
         print(bcolors.color.OKGREEN + "--- Inserted new entry in database ---\n" + bcolors.color.ENDC)
+        return 1
+        
 
     except Exception as e:
         print(bcolors.color.FAIL+ str(e) +bcolors.color.ENDC)
         # Rollback in case there is any error
         db.rollback()
+        return -1
 
     # disconnect from server
     db.close()
