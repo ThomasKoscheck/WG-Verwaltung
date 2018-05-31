@@ -26,4 +26,5 @@
     <string name="title_activity_admin_panel">Admin Panel</string>
     <string name="markDoneConfirmation">Als beyahlt markieren_</string>
     <string name="markDoneConfirmationText">Willst du den Eintrag wirklich als bezahlt markieren?</string>
+    <string name="noValues">Bitte fülle alle Felder aus</string>
 </resources>

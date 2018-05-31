@@ -1,6 +1,5 @@
 package de.thomaskoscheck.wgverwaltung.setting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.thomaskoscheck.wgverwaltung.AdminPanel;
 import de.thomaskoscheck.wgverwaltung.R;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -48,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
         passwordField.setText(settings.getPassword());
         requesterField.setText(settings.getRequester());
         serverField.setText(settings.getServer());
-        if(settings.getPort()!=0) {
+        if (settings.getPort() != 0) {
             portField.setText(String.valueOf(settings.getPort()));
         }
     }
@@ -57,28 +55,36 @@ public class SettingsActivity extends AppCompatActivity {
         save();
     }
 
-    private void save(){
+    private void save() {
+
         String requester = requesterField.getText().toString();
         String password = passwordField.getText().toString();
         String server = serverField.getText().toString();
-        int port = Integer.parseInt(portField.getText().toString());
+        String portString = portField.getText().toString();
 
-        SettingsStore.addValue(getString(R.string.requesterKey), requester, this);
-        SettingsStore.addValue(getString(R.string.passwordKey), password, this);
-        SettingsStore.addValue(getString(R.string.serverKey), server, this);
-        SettingsStore.addValue(getString(R.string.portKey), port, this);
+        if ("".equals(requester) || "".equals(password) || "".equals(server) || "".equals(portString)) {
+            Toast noValues = Toast.makeText(this, getString(R.string.noValues), Toast.LENGTH_LONG);
+            noValues.show();
+        } else {
+            int port = Integer.parseInt(portString);
 
-        settings.setRequester(requester);
-        settings.setPassword(password);
-        settings.setServer(server);
-        settings.setPort(port);
-        Toast settingsSaved = Toast.makeText(this, R.string.settingsSaved, Toast.LENGTH_LONG);
-        settingsSaved.show();
-        finish();
+            SettingsStore.addValue(getString(R.string.requesterKey), requester, this);
+            SettingsStore.addValue(getString(R.string.passwordKey), password, this);
+            SettingsStore.addValue(getString(R.string.serverKey), server, this);
+            SettingsStore.addValue(getString(R.string.portKey), port, this);
+
+            settings.setRequester(requester);
+            settings.setPassword(password);
+            settings.setServer(server);
+            settings.setPort(port);
+            Toast settingsSaved = Toast.makeText(this, R.string.settingsSaved, Toast.LENGTH_LONG);
+            settingsSaved.show();
+            finish();
+        }
     }
 
-    public void launchAdminList(View view){
-        Intent intent = new Intent(this, AdminPanel.class);
-        startActivity(intent);
+    public void launchAdminList(View view) {
+        //Intent intent = new Intent(this, AdminPanel.class);
+        //startActivity(intent);
     }
 }
