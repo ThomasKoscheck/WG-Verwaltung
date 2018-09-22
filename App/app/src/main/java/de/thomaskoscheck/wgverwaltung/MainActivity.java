@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onDataLoaded(ServerResponse serverResponse) {
         if (serverResponse != null) {
-          leftCredit.setText(serverResponse.getCredit() + getCurrencySymbol());
+          leftCredit.setText(String.format("%s%s", serverResponse.getCredit(), getCurrencySymbol()));
         }
       }
     });
