@@ -1,4 +1,4 @@
-socket
+sockets
 MySQLdb
 Crypto
 base64
