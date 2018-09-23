@@ -1,1 +1,2 @@
 sudo apt install mariadb-server libmariadbd-dev mariadb-client
+pip3 install mysql-python 
