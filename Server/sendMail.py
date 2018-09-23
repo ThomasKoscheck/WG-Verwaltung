@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.multipart import MIMEText
+from email.MIMEMultipart import MIMEMultipart	
+from email.MIMEText import MIMEText 
 import bcolors 
 import credentials
  
